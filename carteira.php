@@ -1,33 +1,6 @@
 <!DOCTYPE html>
 <?php
-   include("config.php");
-   session_start();
-   
-   if($_SERVER["REQUEST_METHOD"] == "POST") {
-      // username and password sent from form 
-      
-      $myusername = mysqli_real_escape_string($db,$_POST['username']);
-      $mypassword = mysqli_real_escape_string($db,$_POST['password']); 
-      
-      $sql = "SELECT iduser FROM investdb.user WHERE login = '$myusername' and pass = '$mypassword'";
-      $result = mysqli_query($db,$sql);
-      $row = mysqli_fetch_array($result,MYSQLI_ASSOC);
-      $active = $row['active'];
-      
-      $count = mysqli_num_rows($result);
-      
-      // If result matched $myusername and $mypassword, table row must be 1 row
-		
-      if($count == 1) {
-         $_SESSION["login_user"] = $myusername;
-         //session_register("myusername");
-         //$_SESSION['login_user'] = $myusername;
-         
-         header("location:carteira.php"); die('Não ignore meu cabeçalho...');
-      }else {
-         $error = "Login ou Senha invalidos";
-      }
-   }
+   include('session.php');
 ?>
 
 <html lang="en">
@@ -97,46 +70,17 @@
     </div>
   </div>
 </nav>
-<?php include './includes/f_login.php';
-?>
 
-    
-
-<!-- Conteúdo -->
-<p></p>
-<span></span>
-<span></span>
-
-
-<div class="container">
-	<div class="row justify-content-center">
-		<div class="col-md-12">
-			<div class="row">
-        <form action = "" method = "post">
-<!--           <label>UserName  :</label><input type = "text" name = "username" class = "box"/><br /><br />
-           <label>Password  :</label><input type = "password" name = "password" class = "box" /><br/><br />
-           <input type = "submit" value = " Submit "/><br />
-        </form> -->
- 				<div class="col-sm-4 form-group">
-					<input class="form-control" id="login" name="username" placeholder="Login" type="text" required>
-				</div>
-				<div class="col-sm-4 form-group">
-					<input class="form-control" id="pass" name="password" placeholder="Senha" type="password" required>
-				</div>
-				<div class="col-sm-1 form-group">
-					<button class="btn pull-right" type="submit">Entrar</button>
-				</div>
-        <div class="row">
-          <div class="col-sm-12 form-group" style = "font-size:11px; color:#cc0000; margin-top:10px text-align:center">
-            <?php echo $error; ?>
-          </div>
-        </div>
-      </form>
-			</div>    
-		</div>
-	</div>
-</div>
-</body>
+<!-- Conteúdo -->   
+   <body>
+      <h1>Welcome <?php echo "Login session= "  ;
+                        echo $loginname_session; ?></h1> 
+      <h2> <?php echo " Login user=";
+                  echo $login_user; ?></h2>
+      <h2> <?php echo " verificação de erro =";
+                  echo $erro; ?></h2>
+      <h2><a href = "logout.php">Sign Out</a></h2>
+   </body>
 
 
 
@@ -184,7 +128,5 @@
   
   <p>© Copyright 2018 Blablabla - All Rights Reserved</p>
 </footer>
-
-  
-
-</html>
+   
+</html> 
