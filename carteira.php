@@ -2,7 +2,6 @@
 <?php
    include('session.php');
 ?>
-
 <html lang="en">
 <head>
   <title>Controle de investimentos</title>
@@ -11,6 +10,7 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script language="javascript"> window.document.onload = ajaxFunction; </script>   
   <style>
     /* Remove the navbar's default margin-bottom and rounded borders */ 
     .navbar {
@@ -47,86 +47,97 @@
 </head>
 <body>
 
-<!-- Barra de navegação -->
-<nav class="navbar navbar-inverse">
-  <div class="container-fluid">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>                        
-      </button>
-      <a class="navbar-brand" href="#">Logo</a>
-    </div>
-    <div class="collapse navbar-collapse" id="myNavbar">
-      <ul class="nav navbar-nav">
-        <li class="active"><a href="./index.php">Início</a></li>
-        <li><a href="./sobre.php">Sobre</a></li>
-        <li><a href="./contato.php">Contato</a></li>
-      </ul>
-      <ul class="nav navbar-nav navbar-right">
-        <li><a href="./login.php"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
-      </ul>
-    </div>
-  </div>
-</nav>
 
-<!-- Conteúdo -->   
-   <body>
-      <h1>Welcome <?php echo "Login session= "  ;
-                        echo $loginname_session; ?></h1> 
-      <h2> <?php echo " Login user=";
-                  echo $login_user; ?></h2>
-      <h2> <?php echo " verificação de erro =";
-                  echo $erro; ?></h2>
-      <h2><a href = "logout.php">Sign Out</a></h2>
+   <!-- Barra de navegação -->
+   <nav class="navbar navbar-inverse">
+     <div class="container-fluid">
+       <div class="navbar-header">
+         <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+           <span class="icon-bar"></span>
+           <span class="icon-bar"></span>
+           <span class="icon-bar"></span>                        
+         </button>
+         <a class="navbar-brand" href="#">Logo</a>
+       </div>
+       <div class="collapse navbar-collapse" id="myNavbar">
+         <ul class="nav navbar-nav">
+           <li class="active"><a href="./index.php">Início</a></li>
+           <li><a href="./sobre.php">Sobre</a></li>
+           <li><a href="./contato.php">Contato</a></li>
+         </ul>
+         <ul class="nav navbar-nav navbar-right">
+           <li><a href="./login.php"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+         </ul>
+       </div>
+     </div>
+   </nav>
+      
+      
+      <!-- AJAX -->
+      <script language = "javascript" type = "text/javascript">
+         <!--
+            //Browser Support Code
+            function ajaxFunction(){
+               var ajaxRequest;  // The variable that makes Ajax possible!
+               
+               try {
+                  // Opera 8.0+, Firefox, Safari
+                  ajaxRequest = new XMLHttpRequest();
+               }catch (e) {
+                  // Internet Explorer Browsers
+                  try {
+                     ajaxRequest = new ActiveXObject("Msxml2.XMLHTTP");
+                  }catch (e) {
+                     try{
+                        ajaxRequest = new ActiveXObject("Microsoft.XMLHTTP");
+                     }catch (e){
+                        // Something went wrong
+                        alert("Your browser broke!");
+                        return false;
+                     }
+                  }
+               }
+               
+               // Create a function that will receive data 
+               // sent from the server and will update
+               // div section in the same page.
+					
+               ajaxRequest.onreadystatechange = function(){
+                  if(ajaxRequest.readyState == 4){
+                     var ajaxDisplay = document.getElementById('ajaxDiv');
+                     ajaxDisplay.innerHTML = ajaxRequest.responseText;
+                  }
+               }
+               
+               // Now get the value from user and pass it to
+               // server script.
+					
+               var age = document.getElementById('age').value;
+               var wpm = document.getElementById('wpm').value;
+               var sex = document.getElementById('sex').value;
+               var queryString = "?age=" + age ;
+            
+               queryString +=  "&wpm=" + wpm + "&sex=" + sex;
+               ajaxRequest.open("GET", "get-carteira.php" + queryString, true);
+               ajaxRequest.send(null); 
+            }
+         //-->
+      </script>
+		
+      <form name = 'myForm'>
+         Max Age: <input type = 'text' id = 'age' /> <br />
+         Max WPM: <input type = 'text' id = 'wpm' />
+         <br />
+         
+         Sex: <select id = 'sex'>
+            <option value = "m">m</option>
+            <option value = "f">f</option>
+         </select>
+			
+         <input type = 'button' onclick = 'ajaxFunction()' value = 'Query MySQL'/>
+			
+      </form>
+      
+      <div id = 'ajaxDiv'>Your result will display here</div>
    </body>
-
-
-
-<!-- Footer -->
-<footer class="container-fluid">
-    <div class="container">
-        <div class="media-container-row content text-white">
-            <div class="col-12 col-md-3">
-                <div class="media-wrap">
-                    <a href="https://xxxxxxxxxx.com">
-                        <img src="assets/images/logo24.png" alt="Mobirise">
-                    </a>
-                </div>
-            </div>
-            <div class="col-12 col-md-3 mbr-fonts-style display-7">
-                <h5 class="pb-3">
-                    Address
-                </h5>
-                <p class="mbr-text">
-                    1234 Street Name
-                    <br>City, AA 99999
-                </p>
-            </div>
-            <div class="col-12 col-md-3 mbr-fonts-style display-7">
-                <h5 class="pb-3">
-                    Contacts
-                </h5>
-                <p class="mbr-text">
-                    Email: support@mobirise.com
-                    <br>Phone: +1 (0) 000 0000 001
-                    <br>Fax: +1 (0) 000 0000 002
-                </p>
-            </div>
-            <div class="col-12 col-md-3 mbr-fonts-style display-7">
-                <h5 class="pb-3">
-                    Links
-                </h5>
-                <p class="mbr-text">
-                    <a class="text-primary" href="https://xxxxxxxxxx.com">Website builder</a>
-                    <br><a class="text-primary" href="https://xxxxxxxxxx.commobirise-free-win.zip">Download for Windows</a>
-                    <br><a class="text-primary" href="https://xxxxxxxxxx.commobirise-free-mac.zip">Download for Mac</a>
-                </p>
-            </div>
-        </div>
-  
-  <p>© Copyright 2018 Blablabla - All Rights Reserved</p>
-</footer>
-   
-</html> 
+</html>
