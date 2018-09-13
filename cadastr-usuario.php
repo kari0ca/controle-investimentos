@@ -5,8 +5,50 @@
    
    $error="";
    if($_SERVER["REQUEST_METHOD"] == "POST") {
-      // username and password sent from form 
+      $myusername = mysqli_real_escape_string($db,$_POST['nome']);
+      $mylogin = mysqli_real_escape_string($db,$_POST['username']);
+      $myemail = mysqli_real_escape_string($db,$_POST['email']);
+      $mypassword1 = mysqli_real_escape_string($db,$_POST['password1']);
+      $mypassword2 = mysqli_real_escape_string($db,$_POST['password2']); 
+      $mylembr = mysqli_real_escape_string($db,$_POST['lembrete']); 
       
+      // Procura por usuarios com o mesmo login
+      $sql = "SELECT iduser FROM investdb.user WHERE login = '$myusername'";
+      $result = mysqli_query($db,$sql);
+      $row = mysqli_fetch_array($result,MYSQLI_ASSOC);
+      $active = $row['active'];
+      
+      $count = mysqli_num_rows($result);
+      if($count == 1) {
+        $error="Já existe um usuário com este nome, ";
+      }
+      if($mypassword1!=$mypassword2) {
+        $error.="A confirmação da senha não é igual, ";
+      }
+      //remover 2 ultimos caracteres da string de erro
+      
+      
+      
+      echo "<br> antes de buscar o maior id";
+      // Obtem o maior id_user
+      $sql = "SELECT max(iduser) as iduser FROM investdb.user";
+      $result = mysqli_query($db,$sql) or die(mysql_error());
+      $row = mysqli_fetch_array($result,MYSQLI_ASSOC);
+      $iduser = $row[iduser];
+      echo "<br> Maior ID=".$iduser;
+      $iduser = $iduser + 1;
+      echo "<br> Novo ID=".$iduser;
+      
+      echo "<br>Final das validações";
+      echo "<br>Erro=".$error;
+      echo "<br>dados de validação: Nome:".$myusername." Login:".$mylogin." Email:".$myemail." Password:".$mypassword." Lembrete:".$mylembr;
+      //INSERT INTO `investdb`.`user` (`iduser`, `nome`, `login`, `pass`, `aux_senha`, `email`) VALUES ('', 'afdasfd ', 'asdas sa', '123', '123', 'wg rwg wrg');
+      $sql_insert = "INSERT INTO investdb.user values('".$iduser."','".$myusername."','".$mylogin."','".$mypassword."','".$mylembr."','".$myemail."')";
+      echo "<br>".$sql_insert;
+      /*-------------------------- codigo antigo --------------------------*/
+      
+      /*
+      // username and password sent from form 
       $myusername = mysqli_real_escape_string($db,$_POST['username']);
       $mypassword = mysqli_real_escape_string($db,$_POST['password']); 
       
@@ -16,9 +58,7 @@
       $active = $row['active'];
       
       $count = mysqli_num_rows($result);
-      
       // If result matched $myusername and $mypassword, table row must be 1 row
-		
       if($count == 1) {
          $_SESSION["login_user"] = $myusername;
          //session_register("myusername");
@@ -27,7 +67,7 @@
          header("location:carteira.php"); die('Não ignore meu cabeçalho...');
       }else {
          $error = "Login ou Senha invalidos";
-      }
+      }*/
    }
 ?>
 
@@ -112,17 +152,36 @@
 			<form action = "" method = "post">
         <div class="row">
           <div class="col-sm-4 form-group">
+            <input class="form-control" id="nome" name="nome" placeholder="Nome" type="text" required>
+          </div>
+          <div class="col-sm-4 form-group">
             <input class="form-control" id="login" name="username" placeholder="Login" type="text" required>
           </div>
-          <div class="col-sm-4 form-group">
-            <input class="form-control" id="pass" name="password" placeholder="Senha" type="password" required>
-          </div>
-
         </div>
         <div class="row">
-          <div class="col-sm-4 form-group text-align:center"><a href="cadastr-usuario.php">Cadastrar usuário</a></div>
+          <div class="col-sm-8 form-group">
+            <input class="form-control" id="email" name="email" placeholder="E-mail" type="email" required>
+          </div>
+        </div>
+        <div class="row">
           <div class="col-sm-4 form-group">
-            <button class="btn pull-right align:right" type="submit">Entrar</button>
+            <input class="form-control" id="pass1" name="password1" placeholder="Senha" type="password" required>
+          </div>
+          <div class="col-sm-4 form-group">
+            <input class="form-control" id="pass2" name="password2" placeholder="Repita a Senha" type="password" required>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-4 form-group">
+            <input class="form-control" id="lembrete" name="lembrete" placeholder="Lembrete da senha" type="text" required>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-4 form-group">
+            <button class="btn btn-danger pull-right align:right" type="reset">Cancelar</button>
+          </div>
+          <div class="col-sm-4 form-group">
+            <button class="btn btn-default pull-right align:left " type="submit">Cadastrar</button>
           </div>
         </div>
       </form>
