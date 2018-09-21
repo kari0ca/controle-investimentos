@@ -2,20 +2,15 @@
    include("config.php");   
    session_start();
 
-   //echo "Entrou no get-carteira.php   ";
-   // Retrieve data from Query String
+   /*// Retrieve data from Query String
    $age = $_GET['age'];
    $sex = $_GET['sex'];
    $wpm = $_GET['wpm'];
-   
    // Escape User Input to help prevent SQL Injection
-
-   $age = mysqli_real_escape_string($db,$age);
-   //$sex = mysql_real_escape_string($sex);
-   //$wpm = mysql_real_escape_string($wpm);
+   $age = mysqli_real_escape_string($db,$age);*/
    
    //build query
-   $query = "select idinvest, nome, tipo from investdb.invest";
+   $query = "select i.idinvest, i.nome, t.tipo, s.subtipo from investdb.invest i, investdb.tipo_invest t, investdb.sub_tipo_invest s where i.idtipo=t.idtipoinvest and t.idsubtipo=s.idsubtipo";
    
    //Execute query
    $qry_result = mysqli_query($db,$query) or die(mysql_error());
@@ -27,6 +22,7 @@
    $display_string .= "		<th>Id</th>";
    $display_string .= "		<th>Nome</th>";
    $display_string .= "		<th>Tipo</th>";
+   $display_string .= "		<th>SubTipo</th>";
    $display_string .= "	</tr>";
    $display_string .= "</thead>";
    
@@ -39,6 +35,7 @@
       $display_string .= '		<td>' . $row[idinvest] . '</td>';
       $display_string .= '		<td>' . $row[nome] . '</td>';
       $display_string .= '		<td>' . $row[tipo] . '</td>';
+      $display_string .= '		<td>' . $row[subtipo] . '</td>';
       $display_string .= '	</tr>';
       $display_string .= '</thead>';
       

@@ -5,55 +5,39 @@
    
    $error="";
    if($_SERVER["REQUEST_METHOD"] == "POST") {
-      $myusername = mysqli_real_escape_string($db,$_POST['nome']);
-      $mylogin = mysqli_real_escape_string($db,$_POST['username']);
-      $myemail = mysqli_real_escape_string($db,$_POST['email']);
-      $mypassword1 = mysqli_real_escape_string($db,$_POST['password1']);
-      $mypassword2 = mysqli_real_escape_string($db,$_POST['password2']); 
-      $mylembr = mysqli_real_escape_string($db,$_POST['lembrete']); 
+      $mytipo = mysqli_real_escape_string($db,$_POST['tipo']);
       
-      // Procura por usuarios com o mesmo login
-      $sql = "SELECT iduser FROM investdb.user WHERE login = '$mylogin'";
+      // Procura por outros tipos de investimento com o mesmo nome
+      $sql = "SELECT subtipo FROM investdb.sub_tipo_invest WHERE subtipo = '$mytipo'";
       $result = mysqli_query($db,$sql);
       $row = mysqli_fetch_array($result,MYSQLI_ASSOC);
       $active = $row['active'];
       
       $count = mysqli_num_rows($result);
-      echo "<br> count=".$count;
       if($count >= 1) {
-        $error="Já existe um usuário com este nome, ";
-        echo "<br> Usuário existente";
-      }
-      if($mypassword1!=$mypassword2) {
-        $error.="A confirmação da senha não é igual, ";
-      }
-      //remover 2 ultimos caracteres da string de erro
+        $error="Já existe um Tipo de Investimento com este nome";
+      }      
       
-      
-      
-      echo "<br> antes de buscar o maior id";
       // Obtem o maior id_user
-      $sql = "SELECT max(iduser) as iduser FROM investdb.user";
+      $sql = "SELECT max(idsubtipo) as idsubtipo FROM investdb.sub_tipo_invest";
       $result = mysqli_query($db,$sql) or die(mysql_error());
       $row = mysqli_fetch_array($result,MYSQLI_ASSOC);
-      $iduser = $row[iduser];
-      $param_password = password_hash($mypassword1, PASSWORD_DEFAULT);
-      echo "<br> Maior ID=".$iduser;
-      $iduser = $iduser + 1;
-      echo "<br> Novo ID=".$iduser;
+      $idsubtipo = $row[idsubtipo];
+      $idsubtipo = $idsubtipo + 1;
       
       echo "<br>Final das validações";
-      echo "<br>Erro=".$error;
-      echo "<br>dados de validação: Nome:".$myusername." Login:".$mylogin." Email:".$myemail." Password:".$param_password." Lembrete:".$mylembr;
-      $sql_insert = "INSERT INTO investdb.user values('".$iduser."','".$myusername."','".$mylogin."','".$param_password."','".$mylembr."','".$myemail."')";
-      echo "<br>".$sql_insert;
+      echo "<br>dados de validação: Idsubtipo:".$idsubtipo." SubTipo:".$mysubtipo;
+      //INSERT INTO `investdb`.`user` (`iduser`, `nome`, `login`, `pass`, `aux_senha`, `email`) VALUES ('', 'afdasfd ', 'asdas sa', '123', '123', 'wg rwg wrg');
+      $sql_insert = "INSERT INTO investdb.sub_tipo_invest values('".$idsubtipo."','".$mytipo."')";
+      echo "<br>SQL=".$sql_insert;
       
+      /*
       if (mysqli_query($db, $sql_insert)) {
         echo "New record created successfully";
       } else {
         echo "Error: " . $sql . "<br>" . mysqli_error($conn);
       }
-
+      */
    }
 ?>
 
@@ -128,62 +112,70 @@
 
 <!-- Conteúdo -->
 <p></p>
-<span></span>
-<span></span>
-
-
 <div class="container">
-	<div class="row justify-content-center">
-		<div class="col-md-12">
-			<form action = "" method = "post">
-        <div class="row">
-          <div class="col-sm-4 form-group">
-            <input class="form-control" id="nome" name="nome" placeholder="Nome" type="text" required>
-          </div>
-          <div class="col-sm-4 form-group">
-            <input class="form-control" id="login" name="username" placeholder="Login" type="text" required>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-sm-8 form-group">
-            <input class="form-control" id="email" name="email" placeholder="E-mail" type="email" required>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-sm-4 form-group">
-            <input class="form-control" id="pass1" name="password1" placeholder="Senha" type="password" required>
-          </div>
-          <div class="col-sm-4 form-group">
-            <input class="form-control" id="pass2" name="password2" placeholder="Repita a Senha" type="password" required>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-sm-4 form-group">
-            <input class="form-control" id="lembrete" name="lembrete" placeholder="Lembrete da senha" type="text" required>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-sm-4 form-group">
-            <button class="btn btn-danger pull-right align:right" type="reset">Cancelar</button>
-          </div>
-          <div class="col-sm-4 form-group">
-            <button class="btn btn-default pull-right align:left " type="submit">Cadastrar</button>
-          </div>
-        </div>
-      </form>
-          <div class="row">
-            <?php
-              if ($error!=""){
-                echo '<div class="col-sm-8 form-group alert alert-danger">';
-                echo $error;
-                echo '</div>';
-              }
-            ?>
-          </div>
-      
-		</div>
-	</div>
+  <form action = "" method = "post">
+    <div class="row">
+      <div class="col-sm-8 form-group">
+        <input class="form-control" id="tipo" name="tipo" placeholder=" Tipo de Investimento" type="text" required>
+      </div>
+      <div class="dropdown col-sm-2 form-group">
+        <button class="btn btn-primary dropdown-toggle dropdown-menu-right" type="button" id="subtipo" name="subtipo" data-toggle="dropdown">Subtipo de Investimento
+        <span class="caret"></span></button>
+        <ul class="dropdown-menu">
+          <?php
+            $query = "SELECT subtipo FROM investdb.sub_tipo_invest";
+            
+            //Execute query
+            $qry_result = mysqli_query($db,$query) or die(mysql_error());
+            
+            //Build Result String
+            $display_string = "";
+            
+            // Insert a new row in the table for each person returned
+            while($row = mysqli_fetch_array($qry_result,MYSQLI_ASSOC)) {
+               $display_string .= '<li><a href="#">'. $row[subtipo] . '</a></li>';
+            }
+            echo $display_string;
+          ?>
+        </ul>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-4 form-group">
+        <button class="btn btn-danger pull-right align:right" type="reset">Cancelar</button>
+      </div>
+      <div class="col-sm-4 form-group">
+        <button class="btn btn-default pull-right align:left " type="submit">Cadastrar</button>
+      </div>
+      <div class="col-sm-2 form-group">
+          <a href="cadastr-subtipo.php" class="btn btn-success pull-right align:left">
+            <span class="glyphicon glyphicon-plus-sign"></span> Novo SubTipo
+          </a>
+      </div>
+    </div>
+  </form>
+  
+  <!-- Mensagem de erro -->
+  <div class="row">
+    <?php
+      if ($error!=""){
+        echo '<div class="col-sm-10 form-group alert alert-danger">';
+        echo $error;
+        echo '</div>';
+      }
+    ?>
+  </div>
+  
+  <!-- Listagem de tipos existentes -->
+  <div class="row">
+    <div class="col-sm-5" style="background-color:gray">Tipo</div>
+    <div class="col-sm-5" style="background-color:gray">SubTipo</div>
+  </div>
+  <?php
+    include "get-tipo.php";
+  ?>          
 </div>
+<p></p>
 </body>
 
 
