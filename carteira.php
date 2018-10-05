@@ -1,6 +1,10 @@
 <!DOCTYPE html>
 <?php
-   include('session.php');
+   include("config.php");
+   session_start();
+
+   $idsubtipo = $_POST["subtipo"];
+   $error="";
 ?>
 <!-- AJAX -->
 <script language = "javascript" type = "text/javascript">
@@ -41,12 +45,12 @@
          // Now get the value from user and pass it to
          // server script.
     
-         var age = document.getElementById('age').value;
-         var wpm = document.getElementById('wpm').value;
-         var sex = document.getElementById('sex').value;
-         var queryString = "?age=" + age ;
+         var nome = document.getElementById('nome').value;
+         var tipo = document.getElementById('tipo').value;
+         var subtipo = document.getElementById('subtipo').value;
+         var queryString = "?nome=" + nome ;
       
-         queryString +=  "&wpm=" + wpm + "&sex=" + sex;
+         queryString +=  "&tipo=" + tipo + "&subtipo=" + subtipo;
          ajaxRequest.open("GET", "get-carteira.php" + queryString, true);
          ajaxRequest.send(null); 
       }
@@ -61,8 +65,6 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-  <!--<script language="javascript"> window.document.onload = ajaxFunction </script>
-  <script type="text/javascript"> window.onload = ajaxFunction() </script> -->
   <style>
     /* Remove the navbar's default margin-bottom and rounded borders */ 
     .navbar {
@@ -99,51 +101,114 @@
 </head>
 <body>
 
+  <!-- Barra de navegação -->
+  <nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>                        
+        </button>
+        <a class="navbar-brand" href="#">Logo</a>
+      </div>
+      <div class="collapse navbar-collapse" id="myNavbar">
+        <ul class="nav navbar-nav">
+          <li class="active"><a href="./index.php">Início</a></li>
+          <li><a href="./sobre.php">Sobre</a></li>
+          <li><a href="./contato.php">Contato</a></li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="./login.php"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+          <li><a href="./logout.php"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+      
 
-   <!-- Barra de navegação -->
-   <nav class="navbar navbar-inverse">
-     <div class="container-fluid">
-       <div class="navbar-header">
-         <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-           <span class="icon-bar"></span>
-           <span class="icon-bar"></span>
-           <span class="icon-bar"></span>                        
-         </button>
-         <a class="navbar-brand" href="#">Logo</a>
-       </div>
-       <div class="collapse navbar-collapse" id="myNavbar">
-         <ul class="nav navbar-nav">
-           <li class="active"><a href="./index.php">Início</a></li>
-           <li><a href="./sobre.php">Sobre</a></li>
-           <li><a href="./contato.php">Contato</a></li>
-         </ul>
-         <ul class="nav navbar-nav navbar-right">
-           <li><a href="./login.php"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
-         </ul>
-       </div>
-     </div>
-   </nav>
-      
-      
-
-		
-      <form name = 'myForm'>
-         Max Age: <input type = 'text' id = 'age' /> <br />
-         Max WPM: <input type = 'text' id = 'wpm' />
-         <br />
-         
-         Sex: <select id = 'sex'>
-            <option value = "m">m</option>
-            <option value = "f">f</option>
-         </select>
-			
-         <input type = 'button' onclick = 'ajaxFunction()' value = 'Query MySQL'/>
-			
-      </form>
-      
-      <div id = 'ajaxDiv'>Your result will display here</div>
-      <a href="cadastr-tipo.php" class="btn btn-success btn-sm">
-        <span class="glyphicon glyphicon-plus-sign"></span> Novo Investimento
-      </a>
-   </body>
-</html>
+  <!-- Conteúdo -->
+  <p></p>
+  <span></span>
+  <span></span>
+  
+  
+  <div class="container">
+  
+    <!-- Listagem de investimentos -->
+    <div class="row justify-content-center">
+      <div class="col-md-12">
+        <div class="row">
+          <p><h2>Carteira de Investimentos</h2></p>
+        </div>
+        <form name = 'myForm'>
+          <div class="row">
+            <div class="col-md-2"><h3>Filtros</h3>
+            </div>
+            <div class="col-md-3">Nome:
+              <select class="form-control" name="nome">
+                <option value=""></option>
+                <?php
+                  $query = "SELECT distinct(nome) as nome FROM investdb.invest";
+                  
+                  //Execute query
+                  $qry_result = mysqli_query($db,$query) or die(mysql_error());
+                  $display_string = "";
+                  while($row = mysqli_fetch_array($qry_result,MYSQLI_ASSOC)) {
+                     $display_string .= '<option value="'. $row[nome] . '">'. $row[nome] .'</option>';
+                  }
+                  echo $display_string;
+                ?>
+              </select>
+            </div>
+            <div class="col-md-3">Tipo:
+               <select class="form-control" name="tipo">
+                <option value=""></option>
+                <?php
+                  $query = "SELECT distinct(tipo) as tipo FROM investdb.tipo_invest";
+                  
+                  //Execute query
+                  $qry_result = mysqli_query($db,$query) or die(mysql_error());
+                  
+                  //Build Result String
+                  $display_string = "";
+                  while($row = mysqli_fetch_array($qry_result,MYSQLI_ASSOC)) {
+                     $display_string .= '<option value="'. $row[tipo] . '">'. $row[tipo] .'</option>';
+                  }
+                  echo $display_string;
+                ?>
+              </select>
+            </div>
+            <div class="col-md-3">SubTipo: 
+               <select class="form-control" name="subtipo">
+                <option value=""></option>
+                <?php
+                  $query = "SELECT distinct(subtipo) as subtipo FROM investdb.sub_tipo_invest";
+                  
+                  //Execute query
+                  $qry_result = mysqli_query($db,$query) or die(mysql_error());
+                  //Build Result String
+                  $display_string = "";
+                  while($row = mysqli_fetch_array($qry_result,MYSQLI_ASSOC)) {
+                     $display_string .= '<option value="'. $row[subtipo] . '">'. $row[subtipo] .'</option>';
+                  }
+                  echo $display_string;
+                ?>
+              </select>
+            </div>
+            <div class="col-md-1">
+              <button class="btn btn-default" type="submit">Filtrar</button>
+            </div>
+          </div>
+        </form>
+        <br><br>
+        <div id = 'ajaxDiv'>
+          <?php
+            include "get-carteira.php";
+          ?>
+        </div>
+      </div>
+    </div>
+  </div>
+  <p></p>
+</body>

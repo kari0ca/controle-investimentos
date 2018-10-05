@@ -2,16 +2,30 @@
    include("config.php");   
    session_start();
 
-   /*// Retrieve data from Query String
-   $age = $_GET['age'];
-   $sex = $_GET['sex'];
-   $wpm = $_GET['wpm'];
+   //echo "Entrou no get-carteira.php   ";
+   // Retrieve data from Query String
+   $nome = $_GET['nome'];
+   $tipo = $_GET['tipo'];
+   $subtipo = $_GET['subtipo'];
+   
    // Escape User Input to help prevent SQL Injection
-   $age = mysqli_real_escape_string($db,$age);*/
+   $nome = mysqli_real_escape_string($db,$nome);   
+   $tipo = mysqli_real_escape_string($db,$tipo);   
+   $subtipo = mysqli_real_escape_string($db,$subtipo);   
    
    //build query
    $query = "select i.idinvest, i.nome, t.tipo, s.subtipo from investdb.invest i, investdb.tipo_invest t, investdb.sub_tipo_invest s where i.idtipo=t.idtipoinvest and t.idsubtipo=s.idsubtipo";
-   
+   $query .= " and iduser=".$_SESSION['iduser'];
+   if ($nome  != ''){
+      $query .= " and i.nome='".$nome."'";
+   }
+   if ($tipo  != ''){
+      $query .= " and t.tipo='".$tipo."'";
+   }
+   if ($subtipo  != ''){
+      $query .= " and s.subtipo='".$subtipo."'";
+   }
+
    //Execute query
    $qry_result = mysqli_query($db,$query) or die(mysql_error());
    
@@ -23,6 +37,10 @@
    $display_string .= "		<th>Nome</th>";
    $display_string .= "		<th>Tipo</th>";
    $display_string .= "		<th>SubTipo</th>";
+   $display_string .= "		<th>Rent Total $</th>";
+   $display_string .= "		<th>Rent Mês %</th>";
+   $display_string .= "		<th>Rent Mês %</th>";
+   $display_string .= "		<th>Ativo</th>";
    $display_string .= "	</tr>";
    $display_string .= "</thead>";
    
@@ -36,12 +54,15 @@
       $display_string .= '		<td>' . $row[nome] . '</td>';
       $display_string .= '		<td>' . $row[tipo] . '</td>';
       $display_string .= '		<td>' . $row[subtipo] . '</td>';
+      $display_string .= '		<td></td>';
+      $display_string .= '		<td></td>';
+      $display_string .= '		<td></td>';
+      $display_string .= '		<td></td>';
       $display_string .= '	</tr>';
       $display_string .= '</thead>';
       
       //echo "<br> Id = " . $row[idinvest] . ",";
    }
-   //echo "Query: " . $query . "<br/>";
    
    $display_string .= "</table>";
    echo $display_string;

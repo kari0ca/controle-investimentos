@@ -8,12 +8,24 @@
       // username and password sent from form 
       
       $myusername = mysqli_real_escape_string($db,$_POST['username']);
-      $mypassword = mysqli_real_escape_string($db,$_POST['password']); 
+      $mypassword = mysqli_real_escape_string($db,$_POST['password']);
       
-      $sql = "SELECT iduser FROM investdb.user WHERE login = '$myusername' and pass = '$mypassword'";
+      $param_password = password_hash($mypassword, PASSWORD_DEFAULT);
+      echo "<br> pass orig=".$mypassword." pass_encript=".$param_password.",";
+      
+      $sql = "SELECT iduser, pass FROM investdb.user WHERE login = '$myusername'";
       $result = mysqli_query($db,$sql);
       $row = mysqli_fetch_array($result,MYSQLI_ASSOC);
+      $senha_hash = $row[pass];
       $active = $row['active'];
+      $iduser = $row[iduser];
+      
+      //compara senha com hash
+      if (password_verify ($mypassword, $senha_hash)){
+        echo "<br>Senha verificada com sucesso";
+      } else {
+        echo "<br>Senha não verificada";
+      }
       
       $count = mysqli_num_rows($result);
       
@@ -21,6 +33,7 @@
 		
       if($count == 1) {
          $_SESSION["login_user"] = $myusername;
+         $_SESSION["iduser"] = $iduser;
          //session_register("myusername");
          //$_SESSION['login_user'] = $myusername;
          
@@ -34,7 +47,7 @@
 <html lang="en">
 <head>
   <title>Controle de investimentos</title>
-  <meta charset="utf-8">
+  <meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1" />
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
