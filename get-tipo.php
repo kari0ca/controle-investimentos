@@ -12,8 +12,8 @@
       echo("<br><br>Error description: " . mysqli_error($db))."<br><br>";
    }
    
-   $row = mysqli_fetch_array($qry_result,MYSQLI_ASSOC);
-   $active = $row['active'];
+   //$row = mysqli_fetch_array($qry_result,MYSQLI_ASSOC);
+   //$active = $row['active'];
    $count = mysqli_num_rows($qry_result);
    
    //Build Result String
@@ -23,12 +23,12 @@
    while($row = mysqli_fetch_array($qry_result,MYSQLI_ASSOC)) {
       $display_string .= '    <div class="row">';
       if ($i % 2 == 0){
-         $display_string .= '       <div class="col-sm-5" style="background-color:lightgray">'. $row[tipo] . '</div>';
-         $display_string .= '       <div class="col-sm-5" style="background-color:lightgray">'. $row[subtipo] . '</div>';
+         $display_string .= '       <div class="col-sm-6" style="background-color:lightgray">'. $row[tipo] . '</div>';
+         $display_string .= '       <div class="col-sm-6" style="background-color:lightgray">'. $row[subtipo] . '</div>';
       }
       else {
-         $display_string .= '       <div class="col-sm-5">'. $row[tipo] . '</div>';
-         $display_string .= '       <div class="col-sm-5">'. $row[subtipo] . '</div>';
+         $display_string .= '       <div class="col-sm-6">'. $row[tipo] . '</div>';
+         $display_string .= '       <div class="col-sm-6">'. $row[subtipo] . '</div>';
       }      
       $display_string .= '    </div>';
       $i = $i+1;

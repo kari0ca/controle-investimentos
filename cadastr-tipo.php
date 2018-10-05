@@ -2,13 +2,14 @@
 <?php
    include("config.php");
    session_start();
-   
+
+   $idsubtipo = $_POST["subtipo"];
    $error="";
+
    if($_SERVER["REQUEST_METHOD"] == "POST") {
       $mytipo = mysqli_real_escape_string($db,$_POST['tipo']);
-      
       // Procura por outros tipos de investimento com o mesmo nome
-      $sql = "SELECT subtipo FROM investdb.sub_tipo_invest WHERE subtipo = '$mytipo'";
+      $sql = "SELECT tipo FROM investdb.tipo_invest WHERE tipo = '$mytipo'";
       $result = mysqli_query($db,$sql);
       $row = mysqli_fetch_array($result,MYSQLI_ASSOC);
       $active = $row['active'];
@@ -18,26 +19,23 @@
         $error="Já existe um Tipo de Investimento com este nome";
       }      
       
-      // Obtem o maior id_user
-      $sql = "SELECT max(idsubtipo) as idsubtipo FROM investdb.sub_tipo_invest";
+      // Obtem o maior id_tipo
+      $sql = "SELECT max(idtipoinvest) as idtipo FROM investdb.tipo_invest";
       $result = mysqli_query($db,$sql) or die(mysql_error());
       $row = mysqli_fetch_array($result,MYSQLI_ASSOC);
-      $idsubtipo = $row[idsubtipo];
-      $idsubtipo = $idsubtipo + 1;
+      $idtipo = $row[idtipo];
+      $idtipo = $idtipo + 1;
+      
       
       echo "<br>Final das validações";
-      echo "<br>dados de validação: Idsubtipo:".$idsubtipo." SubTipo:".$mysubtipo;
+      echo "<br>dados de validação: Idtipo:".$idtipo." Tipo:".$mytipo." SubTipo:".$idsubtipo;
       //INSERT INTO `investdb`.`user` (`iduser`, `nome`, `login`, `pass`, `aux_senha`, `email`) VALUES ('', 'afdasfd ', 'asdas sa', '123', '123', 'wg rwg wrg');
-      $sql_insert = "INSERT INTO investdb.sub_tipo_invest values('".$idsubtipo."','".$mytipo."')";
+      $sql_insert = "INSERT INTO investdb.tipo_invest values(".$idtipo.",'".$mytipo."',".$idsubtipo.")";
       echo "<br>SQL=".$sql_insert;
-      
-      /*
-      if (mysqli_query($db, $sql_insert)) {
-        echo "New record created successfully";
-      } else {
-        echo "Error: " . $sql . "<br>" . mysqli_error($conn);
-      }
-      */
+
+      if (!mysqli_query($db, $sql_insert)) {
+        echo "<br><br>Error: " . $sql_insert . "<br>" . mysqli_error($db);
+      }       
    }
 ?>
 
@@ -115,9 +113,34 @@
 <div class="container">
   <form action = "" method = "post">
     <div class="row">
-      <div class="col-sm-8 form-group">
+      <div class="col-sm-6 form-group">
         <input class="form-control" id="tipo" name="tipo" placeholder=" Tipo de Investimento" type="text" required>
       </div>
+      <div class="col-sm-2 form-group text-align:center"> <p> Sub-Tipo de Investimento</p>
+      </div>
+      <div class="col-sm-4 form-group">
+        <select class="form-control" name="subtipo">
+          <?php
+            $query = "SELECT idsubtipo, subtipo FROM investdb.sub_tipo_invest";
+            
+            //Execute query
+            $qry_result = mysqli_query($db,$query) or die(mysql_error());
+            
+            //Build Result String
+            $display_string = "";
+            
+            // Insert a new row in the table for each person returned
+            while($row = mysqli_fetch_array($qry_result,MYSQLI_ASSOC)) {
+               $display_string .= '<option value="'. $row[idsubtipo] . '">'. $row[subtipo] .'</option>';
+            }
+            echo $display_string;
+          ?>
+        </select>
+      </div>      
+      
+      
+      
+      <!--
       <div class="dropdown col-sm-2 form-group">
         <button class="btn btn-primary dropdown-toggle dropdown-menu-right" type="button" id="subtipo" name="subtipo" data-toggle="dropdown">Subtipo de Investimento
         <span class="caret"></span></button>
@@ -139,21 +162,23 @@
           ?>
         </ul>
       </div>
-    </div>
+      -->
+
     <div class="row">
-      <div class="col-sm-4 form-group">
-        <button class="btn btn-danger pull-right align:right" type="reset">Cancelar</button>
-      </div>
-      <div class="col-sm-4 form-group">
-        <button class="btn btn-default pull-right align:left " type="submit">Cadastrar</button>
-      </div>
-      <div class="col-sm-2 form-group">
-          <a href="cadastr-subtipo.php" class="btn btn-success pull-right align:left">
+      <div class="col-sm-12 form-group">
+        <div class="btn-group pull-right">
+          <a href="cadastr-subtipo.php" class="btn btn-success ">
             <span class="glyphicon glyphicon-plus-sign"></span> Novo SubTipo
           </a>
+          <button class="btn btn-danger" type="reset">Cancelar</button>
+          <button class="btn btn-default" type="submit">Cadastrar</button>
+        </div>  
       </div>
     </div>
   </form>
+  
+
+  
   
   <!-- Mensagem de erro -->
   <div class="row">
@@ -168,8 +193,8 @@
   
   <!-- Listagem de tipos existentes -->
   <div class="row">
-    <div class="col-sm-5" style="background-color:gray">Tipo</div>
-    <div class="col-sm-5" style="background-color:gray">SubTipo</div>
+    <div class="col-sm-6" style="background-color:gray">Tipo</div>
+    <div class="col-sm-6" style="background-color:gray">SubTipo</div>
   </div>
   <?php
     include "get-tipo.php";

@@ -114,24 +114,24 @@
   <div class="container">
     <form action = "" method = "post">
       <div class="row">
-        <div class="col-sm-8 form-group">
+        <div class="col-sm-12 form-group">
           <input class="form-control" id="subtipo" name="subtipo" placeholder="Sub Tipo de Investimento" type="text" required>
         </div>
       </div>
-      <div class="row">
-        <div class="col-sm-4 form-group">
-          <button class="btn btn-danger pull-right align:right" type="reset">Cancelar</button>
-        </div>
-        <div class="col-sm-4 form-group">
-          <button class="btn btn-default pull-right align:left " type="submit">Cadastrar</button>
+    <div class="row">
+      <div class="col-sm-12 form-group">
+        <div class="btn-group pull-right">
+          <button class="btn btn-danger" type="reset">Cancelar</button>
+          <button class="btn btn-default" type="submit">Cadastrar</button>
         </div>
       </div>
+    </div>
       
     </form>
     <div class="row">
       <?php
         if ($error!=""){
-          echo '<div class="col-sm-8 form-group alert alert-danger">';
+          echo '<div class="col-sm-12 form-group alert alert-danger">';
           echo $error;
           echo '</div>';
         }
@@ -140,7 +140,7 @@
     
     <!-- Listagem de subtipos -->
     <div class="row justify-content-center">
-      <div class="col-sm-8">
+      <div class="col-sm-12">
         <div class="row">
           <div class="col-sm-12" style="background-color:gray">Subtipo(s) de investimento existente
           </div>
