@@ -6,52 +6,8 @@
    $error="";
    if($_SERVER["REQUEST_METHOD"] == "POST") {
       $myusername = mysqli_real_escape_string($db,$_POST['nome']);
-      $mylogin = mysqli_real_escape_string($db,$_POST['username']);
-      $myemail = mysqli_real_escape_string($db,$_POST['email']);
-      $mypassword1 = mysqli_real_escape_string($db,$_POST['password1']);
-      $mypassword2 = mysqli_real_escape_string($db,$_POST['password2']); 
-      $mylembr = mysqli_real_escape_string($db,$_POST['lembrete']); 
-      
-      // Procura por usuarios com o mesmo login
-      $sql = "SELECT iduser FROM investdb.user WHERE login = '$mylogin'";
-      $result = mysqli_query($db,$sql);
-      $row = mysqli_fetch_array($result,MYSQLI_ASSOC);
-      $active = $row['active'];
-      
-      $count = mysqli_num_rows($result);
-      //echo "<br> count=".$count;
-      if($count >= 1) {
-        $error="Já existe um usuário com este nome, ";
-        //echo "<br> Usuário existente";
-      }
-      if($mypassword1!=$mypassword2) {
-        $error.="A confirmação da senha não é igual, ";
-      }
-      //remover 2 ultimos caracteres da string de erro
-      
-      
-      
-      //echo "<br> antes de buscar o maior id";
-      // Obtem o maior id_user
-      $sql = "SELECT max(iduser) as iduser FROM investdb.user";
-      $result = mysqli_query($db,$sql) or die(mysql_error());
-      $row = mysqli_fetch_array($result,MYSQLI_ASSOC);
-      $iduser = $row[iduser];
-      $param_password = password_hash($mypassword1, PASSWORD_DEFAULT);
-      //echo "<br> Maior ID=".$iduser;
-      $iduser = $iduser + 1;
-      //echo "<br> Novo ID=".$iduser;
-      
-      //echo "<br>dados de validação: Nome:".$myusername." Login:".$mylogin." Email:".$myemail." Password:".$param_password." Lembrete:".$mylembr;
-      $sql_insert = "INSERT INTO investdb.user values('".$iduser."','".$myusername."','".$mylogin."','".$param_password."','".$mylembr."','".$myemail."')";
-      
-      if (mysqli_query($db, $sql_insert)) {
-        //echo "New record created successfully";
-      } else {
-        echo "Error: " . $sql . "<br>" . mysqli_error($conn);
-      }
-
    }
+
 ?>
 
 <html lang="en">
@@ -133,53 +89,95 @@
 	<div class="row justify-content-center">
 		<div class="col-md-12">
 			<form action = "" method = "post">
-        <div class="row">
-          <div class="col-sm-4 form-group">
-            <input class="form-control" id="nome" name="nome" placeholder="Nome" type="text" required>
-          </div>
-          <div class="col-sm-4 form-group">
-            <input class="form-control" id="login" name="username" placeholder="Login" type="text" required>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-sm-8 form-group">
-            <input class="form-control" id="email" name="email" placeholder="E-mail" type="email" required>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-sm-4 form-group">
-            <input class="form-control" id="pass1" name="password1" placeholder="Senha" type="password" required>
-          </div>
-          <div class="col-sm-4 form-group">
-            <input class="form-control" id="pass2" name="password2" placeholder="Repita a Senha" type="password" required>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-sm-4 form-group">
-            <input class="form-control" id="lembrete" name="lembrete" placeholder="Lembrete da senha" type="text" required>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-sm-4 form-group">
-            <button class="btn btn-danger pull-right align:right" type="reset">Cancelar</button>
-          </div>
-          <div class="col-sm-4 form-group">
-            <button class="btn btn-default pull-right align:left " type="submit">Cadastrar</button>
-          </div>
-        </div>
-      </form>
-          <div class="row">
-            <?php
-              if ($error!=""){
-                echo '<div class="col-sm-8 form-group alert alert-danger">';
-                echo $error;
-                echo '</div>';
-              }
-            ?>
-          </div>
-      
-		</div>
-	</div>
+         <div class="row">
+            <div class="col-sm-4 form-group">//nome
+               <input class="form-control" id="nome" name="nome" placeholder="Nome do investimento" type="text" required>
+            </div>
+            <div class="col-sm-4 form-group">//entidade
+               <input class="form-control" id="entidade" name="entidade" placeholder="Entidade gestora" type="text" required>
+            </div>
+            <div class="col-sm-4 form-group">//tipo investimento
+               <input class="form-control" id="tipoinv" name="tipoinv" placeholder="Tipo de investimento" type="text" required>
+            </div>
+         </div>
+         <div class="row">
+            <div class="col-sm-12 form-group">//detalhe
+               <input class="form-control" id="detalhe" name="detalhe" placeholder="Detalhes do investimento" type="text" >
+            </div>
+         </div>
+         <div class="row">
+            <div class="col-sm-3 form-group">//data inicio
+               <input class="form-control" id="dataini" name="dataini" placeholder="Data inicial" type="date" data-date-format="YYYY/MM/DD" required>
+            </div>
+            <div class="col-sm-3 form-group">//data fim
+               <input class="form-control" id="datafim" name="datafim" placeholder="Data final" type="date" format="DD/MM/YYYY" required>
+            </div>
+            <div class="col-sm-1 form-group">//ativo
+               <input class="form-check-input" id="ativo" name="ativo" placeholder="ativo" type="checkbox" value="">
+            </div>
+            
+         </div>
+         <div class="row">
+
+            <div class="col-sm-3 form-group">
+               <div class='input-group date' id='datetimepicker1'>
+                  <input type='text' class="form-control" />
+                  <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+               </div>
+            </div>
+            <script>
+               $(function () {
+   var bindDatePicker = function() {
+		$(".date").datetimepicker({
+        format:'YYYY-MM-DD',
+			icons: {
+				time: "fa fa-clock-o",
+				date: "fa fa-calendar",
+				up: "fa fa-arrow-up",
+				down: "fa fa-arrow-down"
+			}
+		}).find('input:first').on("blur",function () {
+			// check if the date is correct. We can accept dd-mm-yyyy and yyyy-mm-dd.
+			// update the format if it's yyyy-mm-dd
+			var date = parseDate($(this).val());
+
+			if (! isValidDate(date)) {
+				//create date based on momentjs (we have that)
+				date = moment().format('YYYY-MM-DD');
+			}
+
+			$(this).val(date);
+		});
+	}
+   
+   var isValidDate = function(value, format) {
+		format = format || false;
+		// lets parse the date to the best of our knowledge
+		if (format) {
+			value = parseDate(value);
+		}
+
+		var timestamp = Date.parse(value);
+
+		return isNaN(timestamp) == false;
+   }
+   
+   var parseDate = function(value) {
+		var m = value.match(/^(\d{1,2})(\/|-)?(\d{1,2})(\/|-)?(\d{4})$/);
+		if (m)
+			value = m[5] + '-' + ("00" + m[3]).slice(-2) + '-' + ("00" + m[1]).slice(-2);
+
+		return value;
+   }
+   
+   bindDatePicker();
+ });
+            </script>
+
+
+         </div>
+      </div>
+   </div>
 </div>
 </body>
 

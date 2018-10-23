@@ -11,7 +11,6 @@
       $mypassword = mysqli_real_escape_string($db,$_POST['password']);
       
       $param_password = password_hash($mypassword, PASSWORD_DEFAULT);
-      echo "<br> pass orig=".$mypassword." pass_encript=".$param_password.",";
       
       $sql = "SELECT iduser, pass FROM investdb.user WHERE login = '$myusername'";
       $result = mysqli_query($db,$sql);
@@ -22,9 +21,9 @@
       
       //compara senha com hash
       if (password_verify ($mypassword, $senha_hash)){
-        echo "<br>Senha verificada com sucesso";
+        //echo "<br>Senha verificada com sucesso";
       } else {
-        echo "<br>Senha não verificada";
+        //echo "<br>Senha não verificada";
       }
       
       $count = mysqli_num_rows($result);
@@ -34,9 +33,6 @@
       if($count == 1) {
          $_SESSION["login_user"] = $myusername;
          $_SESSION["iduser"] = $iduser;
-         //session_register("myusername");
-         //$_SESSION['login_user'] = $myusername;
-         
          header("location:carteira.php"); die('Não ignore meu cabeçalho...');
       }else {
          $error = "Login ou Senha invalidos";
