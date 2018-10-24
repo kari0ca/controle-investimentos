@@ -2,7 +2,7 @@
 return [
     'databases' => [
         'default' => [
-            'driver' => 'MySQL',
+            'driver' => \App\Database\Driver\MySQL::class,
             'hostname' => 'localhost',
             'username' => 'higor',
             'password' => 'sp120c',
