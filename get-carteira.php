@@ -13,19 +13,33 @@
    $tipo = mysqli_real_escape_string($db,$tipo);   
    $subtipo = mysqli_real_escape_string($db,$subtipo);   
    
+	echo "userid=".$_SESSION['iduser'];
+	
+	/*
+	select c.idcarteira, c.idinvest, i.nome, e.entidade, c.data_ini, c.rent_val, c.rent_perc, c.ativo
+from investdb.carteira c, investdb.invest i, investdb.entidade e
+where c.idinvest = i.idinvest and i.identidade = e.identidade; 
+	*/
+	
+	
    //build query
-   $query = "select i.idinvest, i.nome, t.tipo, s.subtipo from investdb.invest i, investdb.tipo_invest t, investdb.sub_tipo_invest s where i.idtipo=t.idtipoinvest and t.idsubtipo=s.idsubtipo";
-   $query .= " and iduser=".$_SESSION['iduser'];
+   //$query = "select i.idinvest, i.nome, t.tipo, s.subtipo from investdb.invest i, investdb.tipo_invest t, investdb.sub_tipo_invest s where i.idtipo=t.idtipoinvest and t.idsubtipo=s.idsubtipo";
+	$query = "select c.idcarteira, c.idinvest, i.nome, e.entidade, c.data_ini, c.rent_val, c.rent_perc, c.ativo from investdb.carteira c, investdb.invest i, investdb.entidade e where c.idinvest = i.idinvest and i.identidade = e.identidade";
+	$query .= " and iduser=".$_SESSION['iduser'];
    if ($nome  != ''){
       $query .= " and i.nome='".$nome."'";
    }
+	
+	/*  comentario previo de tipo e subtipo
    if ($tipo  != ''){
       $query .= " and t.tipo='".$tipo."'";
    }
    if ($subtipo  != ''){
       $query .= " and s.subtipo='".$subtipo."'";
    }
-
+	*/
+	
+	
    //Execute query
    $qry_result = mysqli_query($db,$query) or die(mysql_error());
    

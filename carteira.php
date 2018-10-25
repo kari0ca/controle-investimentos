@@ -8,53 +8,50 @@
 ?>
 <!-- AJAX -->
 <script language = "javascript" type = "text/javascript">
-   <!--
-      //Browser Support Code
-      function ajaxFunction(){
-         var ajaxRequest;  // The variable that makes Ajax possible!
+	function ajaxFunction(){ //Browser Support Code
+		var ajaxRequest;  // The variable that makes Ajax possible!
+		
+		try {
+			// Opera 8.0+, Firefox, Safari
+			ajaxRequest = new XMLHttpRequest();
+		}catch (e) {
+			// Internet Explorer Browsers
+			try {
+				ajaxRequest = new ActiveXObject("Msxml2.XMLHTTP");
+			}catch (e) {
+				try{
+					ajaxRequest = new ActiveXObject("Microsoft.XMLHTTP");
+				}catch (e){
+					// Something went wrong
+					alert("Your browser broke!");
+					return false;
+				}
+			}
+		}
          
-         try {
-            // Opera 8.0+, Firefox, Safari
-            ajaxRequest = new XMLHttpRequest();
-         }catch (e) {
-            // Internet Explorer Browsers
-            try {
-               ajaxRequest = new ActiveXObject("Msxml2.XMLHTTP");
-            }catch (e) {
-               try{
-                  ajaxRequest = new ActiveXObject("Microsoft.XMLHTTP");
-               }catch (e){
-                  // Something went wrong
-                  alert("Your browser broke!");
-                  return false;
-               }
-            }
-         }
-         
-         // Create a function that will receive data 
-         // sent from the server and will update
-         // div section in the same page.
-    
-         ajaxRequest.onreadystatechange = function(){
-            if(ajaxRequest.readyState == 4){
-               var ajaxDisplay = document.getElementById('ajaxDiv');
-               ajaxDisplay.innerHTML = ajaxRequest.responseText;
-            }
-         }
-         
-         // Now get the value from user and pass it to
-         // server script.
-    
-         var nome = document.getElementById('nome').value;
-         var tipo = document.getElementById('tipo').value;
-         var subtipo = document.getElementById('subtipo').value;
-         var queryString = "?nome=" + nome ;
-      
-         queryString +=  "&tipo=" + tipo + "&subtipo=" + subtipo;
-         ajaxRequest.open("GET", "get-carteira.php" + queryString, true);
-         ajaxRequest.send(null); 
-      }
-   //-->
+		// Create a function that will receive data 
+		// sent from the server and will update
+		// div section in the same page.
+ 
+		ajaxRequest.onreadystatechange = function(){
+			if(ajaxRequest.readyState == 4){
+				var ajaxDisplay = document.getElementById('ajaxDiv');
+				ajaxDisplay.innerHTML = ajaxRequest.responseText;
+			}
+		}
+		
+		// Now get the value from user and pass it to
+		// server script.
+ 
+		var nome = document.getElementById('nome').value;
+		var tipo = document.getElementById('tipo').value;
+		var subtipo = document.getElementById('subtipo').value;
+		var queryString = "?nome=" + nome ;
+	
+		queryString +=  "&tipo=" + tipo + "&subtipo=" + subtipo;
+		ajaxRequest.open("GET", "get-carteira.php" + queryString, true);
+		ajaxRequest.send(null); 
+	}
 </script>
 
 <html lang="en">
@@ -137,78 +134,78 @@
   
     <!-- Listagem de investimentos -->
     <div class="row justify-content-center">
-      <div class="col-md-12">
-        <div class="row">
-          <p><h2>Carteira de Investimentos</h2></p>
-        </div>
-        <form name = 'myForm'>
-          <div class="row">
-            <div class="col-md-2"><h3>Filtros</h3>
-            </div>
-            <div class="col-md-3">Nome:
-              <select class="form-control" name="nome">
-                <option value=""></option>
-                <?php
-                  $query = "SELECT distinct(nome) as nome FROM investdb.invest";
-                  
-                  //Execute query
-                  $qry_result = mysqli_query($db,$query) or die(mysql_error());
-                  $display_string = "";
-                  while($row = mysqli_fetch_array($qry_result,MYSQLI_ASSOC)) {
-                     $display_string .= '<option value="'. $row[nome] . '">'. $row[nome] .'</option>';
-                  }
-                  echo $display_string;
-                ?>
-              </select>
-            </div>
-            <div class="col-md-3">Tipo:
-               <select class="form-control" name="tipo">
-                <option value=""></option>
-                <?php
-                  $query = "SELECT distinct(tipo) as tipo FROM investdb.tipo_invest";
-                  
-                  //Execute query
-                  $qry_result = mysqli_query($db,$query) or die(mysql_error());
-                  
-                  //Build Result String
-                  $display_string = "";
-                  while($row = mysqli_fetch_array($qry_result,MYSQLI_ASSOC)) {
-                     $display_string .= '<option value="'. $row[tipo] . '">'. $row[tipo] .'</option>';
-                  }
-                  echo $display_string;
-                ?>
-              </select>
-            </div>
-            <div class="col-md-3">SubTipo: 
-               <select class="form-control" name="subtipo">
-                <option value=""></option>
-                <?php
-                  $query = "SELECT distinct(subtipo) as subtipo FROM investdb.sub_tipo_invest";
-                  
-                  //Execute query
-                  $qry_result = mysqli_query($db,$query) or die(mysql_error());
-                  //Build Result String
-                  $display_string = "";
-                  while($row = mysqli_fetch_array($qry_result,MYSQLI_ASSOC)) {
-                     $display_string .= '<option value="'. $row[subtipo] . '">'. $row[subtipo] .'</option>';
-                  }
-                  echo $display_string;
-                ?>
-              </select>
-            </div>
-            <div class="col-md-1">
-              <button class="btn btn-default" type="submit">Filtrar</button>
-            </div>
-          </div>
-        </form>
-        <br><br>
-        <div id = 'ajaxDiv'>
-          <?php
-            include "get-carteira.php";
-          ?>
-        </div>
+      <div class="col-xs-12">
+			<div class="row">
+				 <p><h2>Carteira de Investimentos</h2></p>
+			</div>
+			<form name = 'myForm'>
+				<div class="row">
+					<div class="col-xs-1"><h4>Filtros</h4>
+					</div>
+					<div class="col-xs-3">Nome:
+						<select class="form-control" name="nome">
+							<option value=""></option>
+							<?php
+								$query = "SELECT distinct(nome) as nome FROM investdb.invest";
+								
+								//Execute query
+								$qry_result = mysqli_query($db,$query) or die(mysql_error());
+								$display_string = "";
+								while($row = mysqli_fetch_array($qry_result,MYSQLI_ASSOC)) {
+									$display_string .= '<option value="'. $row[nome] . '">'. $row[nome] .'</option>';
+								}
+								echo $display_string;
+							?>
+						</select>
+					</div>
+					<div class="col-xs-3">Tipo:
+						<select class="form-control" name="tipo">
+							<option value=""></option>
+							<?php
+								$query = "SELECT distinct(tipo) as tipo FROM investdb.tipo_invest";
+								
+								//Execute query
+								$qry_result = mysqli_query($db,$query) or die(mysql_error());
+								
+								//Build Result String
+								$display_string = "";
+								while($row = mysqli_fetch_array($qry_result,MYSQLI_ASSOC)) {
+									$display_string .= '<option value="'. $row[tipo] . '">'. $row[tipo] .'</option>';
+								}
+								echo $display_string;
+							?>
+					  </select>
+					</div>
+					<div class="col-xs-3">SubTipo: 
+						<select class="form-control" name="subtipo">
+							<option value=""></option>
+							<?php
+								$query = "SELECT distinct(subtipo) as subtipo FROM investdb.sub_tipo_invest";
+								
+								//Execute query
+								$qry_result = mysqli_query($db,$query) or die(mysql_error());
+								//Build Result String
+								$display_string = "";
+								while($row = mysqli_fetch_array($qry_result,MYSQLI_ASSOC)) {
+									$display_string .= '<option value="'. $row[subtipo] . '">'. $row[subtipo] .'</option>';
+								}
+								echo $display_string;
+							?>
+					  </select>
+					</div>
+					<div class="col-xs-1">
+						<button class="btn btn-default" type="submit">Filtrar</button>
+					</div>
+				</div>
+			</form>
+			<br><br>
+			<div id = 'ajaxDiv'>
+			  <?php
+				 include "get-carteira.php";
+			  ?>
+			</div>
       </div>
-    </div>
-  </div>
-  <p></p>
+   </div>
+</div>
+<p></p>
 </body>

@@ -16,26 +16,28 @@
       
       $count = mysqli_num_rows($result);
       if($count >= 1) {
-        $error="Já existe um Tipo de Investimento com este nome";
-      }      
+			$error="Já existe um Tipo de Investimento com este nome";
+      }
+      else {
       
-      // Obtem o maior id_tipo
-      $sql = "SELECT max(idtipoinvest) as idtipo FROM investdb.tipo_invest";
-      $result = mysqli_query($db,$sql) or die(mysql_error());
-      $row = mysqli_fetch_array($result,MYSQLI_ASSOC);
-      $idtipo = $row[idtipo];
-      $idtipo = $idtipo + 1;
-      
-      
-      echo "<br>Final das validações";
-      echo "<br>dados de validação: Idtipo:".$idtipo." Tipo:".$mytipo." SubTipo:".$idsubtipo;
-      //INSERT INTO `investdb`.`user` (`iduser`, `nome`, `login`, `pass`, `aux_senha`, `email`) VALUES ('', 'afdasfd ', 'asdas sa', '123', '123', 'wg rwg wrg');
-      $sql_insert = "INSERT INTO investdb.tipo_invest values(".$idtipo.",'".$mytipo."',".$idsubtipo.")";
-      echo "<br>SQL=".$sql_insert;
-
-      if (!mysqli_query($db, $sql_insert)) {
-        echo "<br><br>Error: " . $sql_insert . "<br>" . mysqli_error($db);
-      }       
+        // Obtem o maior id_tipo
+        $sql = "SELECT max(idtipoinvest) as idtipo FROM investdb.tipo_invest";
+        $result = mysqli_query($db,$sql) or die(mysql_error());
+        $row = mysqli_fetch_array($result,MYSQLI_ASSOC);
+        $idtipo = $row[idtipo];
+        $idtipo = $idtipo + 1;
+        
+        
+        //echo "<br>Final das validações";
+        //echo "<br>dados de validação: Idtipo:".$idtipo." Tipo:".$mytipo." SubTipo:".$idsubtipo;
+        //INSERT INTO `investdb`.`user` (`iduser`, `nome`, `login`, `pass`, `aux_senha`, `email`) VALUES ('', 'afdasfd ', 'asdas sa', '123', '123', 'wg rwg wrg');
+        $sql_insert = "INSERT INTO investdb.tipo_invest values(".$idtipo.",'".$mytipo."',".$idsubtipo.")";
+        //echo "<br>SQL=".$sql_insert;
+  
+        if (!mysqli_query($db, $sql_insert)) {
+          echo "<br><br>Error: " . $sql_insert . "<br>" . mysqli_error($db);
+        }
+        }
    }
 ?>
 
@@ -113,12 +115,12 @@
 <div class="container">
   <form action = "" method = "post">
     <div class="row">
-      <div class="col-sm-6 form-group">
+      <div class="col-xs-6 form-group">
         <input class="form-control" id="tipo" name="tipo" placeholder=" Tipo de Investimento" type="text" required>
       </div>
-      <div class="col-sm-2 form-group text-align:center"> <p> Sub-Tipo de Investimento</p>
+      <div class="col-xs-2 form-group text-align:center"> <p> Sub-Tipo de Investimento</p>
       </div>
-      <div class="col-sm-4 form-group">
+      <div class="col-xs-4 form-group">
         <select class="form-control" name="subtipo">
           <?php
             $query = "SELECT idsubtipo, subtipo FROM investdb.sub_tipo_invest";
@@ -141,7 +143,7 @@
       
       
       <!--
-      <div class="dropdown col-sm-2 form-group">
+      <div class="dropdown col-xs-2 form-group">
         <button class="btn btn-primary dropdown-toggle dropdown-menu-right" type="button" id="subtipo" name="subtipo" data-toggle="dropdown">Subtipo de Investimento
         <span class="caret"></span></button>
         <ul class="dropdown-menu">
@@ -165,9 +167,9 @@
       -->
 
     <div class="row">
-      <div class="col-sm-12 form-group">
+      <div class="col-xs-12 form-group">
         <div class="btn-group pull-right">
-          <a href="cadastr-subtipo.php" class="btn btn-success ">
+          <a href="cadastr-subtipo.php" class="btn btn-info">
             <span class="glyphicon glyphicon-plus-sign"></span> Novo SubTipo
           </a>
           <button class="btn btn-danger" type="reset">Cancelar</button>
@@ -184,7 +186,7 @@
   <div class="row">
     <?php
       if ($error!=""){
-        echo '<div class="col-sm-10 form-group alert alert-danger">';
+        echo '<div class="col-xs-10 form-group alert alert-danger">';
         echo $error;
         echo '</div>';
       }
@@ -193,8 +195,8 @@
   
   <!-- Listagem de tipos existentes -->
   <div class="row">
-    <div class="col-sm-6" style="background-color:gray">Tipo</div>
-    <div class="col-sm-6" style="background-color:gray">SubTipo</div>
+    <div class="col-xs-6" style="background-color:gray">Tipo</div>
+    <div class="col-xs-6" style="background-color:gray">SubTipo</div>
   </div>
   <?php
     include "get-tipo.php";
@@ -209,14 +211,14 @@
 <footer class="container-fluid">
     <div class="container">
         <div class="media-container-row content text-white">
-            <div class="col-12 col-md-3">
+            <div class="col-12 col-xs-3">
                 <div class="media-wrap">
                     <a href="https://xxxxxxxxxx.com">
                         <img src="assets/images/logo24.png" alt="Mobirise">
                     </a>
                 </div>
             </div>
-            <div class="col-12 col-md-3 mbr-fonts-style display-7">
+            <div class="col-12 col-xs-3 mbr-fonts-style display-7">
                 <h5 class="pb-3">
                     Address
                 </h5>
@@ -225,7 +227,7 @@
                     <br>City, AA 99999
                 </p>
             </div>
-            <div class="col-12 col-md-3 mbr-fonts-style display-7">
+            <div class="col-12 col-xs-3 mbr-fonts-style display-7">
                 <h5 class="pb-3">
                     Contacts
                 </h5>
@@ -235,7 +237,7 @@
                     <br>Fax: +1 (0) 000 0000 002
                 </p>
             </div>
-            <div class="col-12 col-md-3 mbr-fonts-style display-7">
+            <div class="col-12 col-xs-3 mbr-fonts-style display-7">
                 <h5 class="pb-3">
                     Links
                 </h5>

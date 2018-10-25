@@ -117,20 +117,20 @@
 
 <div class="container">
 	<div class="row justify-content-center">
-		<div class="col-md-12">
+		<div class="col-xs-12">
 			<form action = "" method = "post">
         <div class="row">
-          <div class="col-sm-4 form-group">
+          <div class="col-xs-4 form-group">
             <input class="form-control" id="login" name="username" placeholder="Login" type="text" required>
           </div>
-          <div class="col-sm-4 form-group">
+          <div class="col-xs-4 form-group">
             <input class="form-control" id="pass" name="password" placeholder="Senha" type="password" required>
           </div>
 
         </div>
         <div class="row">
-          <div class="col-sm-4 form-group text-align:center"><a href="cadastr-usuario.php">Cadastrar usuário</a></div>
-          <div class="col-sm-4 form-group">
+          <div class="col-xs-4 form-group text-align:center"><a href="cadastr-usuario.php">Cadastrar usuário</a></div>
+          <div class="col-xs-4 form-group">
             <button class="btn pull-right align:right" type="submit">Entrar</button>
           </div>
         </div>
@@ -138,7 +138,7 @@
           <div class="row">
             <?php
               if ($error!=""){
-                echo '<div class="col-sm-8 form-group alert alert-danger">';
+                echo '<div class="col-xs-8 form-group alert alert-danger">';
                 echo $error;
                 echo '</div>';
               }
@@ -156,14 +156,14 @@
 <footer class="container-fluid">
     <div class="container">
         <div class="media-container-row content text-white">
-            <div class="col-12 col-md-3">
+            <div class="col-12 col-xs-3">
                 <div class="media-wrap">
                     <a href="https://xxxxxxxxxx.com">
                         <img src="assets/images/logo24.png" alt="Mobirise">
                     </a>
                 </div>
             </div>
-            <div class="col-12 col-md-3 mbr-fonts-style display-7">
+            <div class="col-12 col-xs-3 mbr-fonts-style display-7">
                 <h5 class="pb-3">
                     Address
                 </h5>
@@ -172,7 +172,7 @@
                     <br>City, AA 99999
                 </p>
             </div>
-            <div class="col-12 col-md-3 mbr-fonts-style display-7">
+            <div class="col-12 col-xs-3 mbr-fonts-style display-7">
                 <h5 class="pb-3">
                     Contacts
                 </h5>
@@ -182,7 +182,7 @@
                     <br>Fax: +1 (0) 000 0000 002
                 </p>
             </div>
-            <div class="col-12 col-md-3 mbr-fonts-style display-7">
+            <div class="col-12 col-xs-3 mbr-fonts-style display-7">
                 <h5 class="pb-3">
                     Links
                 </h5>

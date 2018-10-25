@@ -27,7 +27,6 @@
         $idsubtipo = $idsubtipo + 1;
         
         $sql_insert = "INSERT INTO investdb.sub_tipo_invest values(".$idsubtipo.",'".$mysubtipo."')";
-        
         if (!mysqli_query($db, $sql_insert)) {
           echo "Error: " . $sql_insert . "<br>" . mysqli_error($db);
         } 
@@ -114,12 +113,12 @@
   <div class="container">
     <form action = "" method = "post">
       <div class="row">
-        <div class="col-sm-12 form-group">
+        <div class="col-xs-12 form-group">
           <input class="form-control" id="subtipo" name="subtipo" placeholder="Sub Tipo de Investimento" type="text" required>
         </div>
       </div>
     <div class="row">
-      <div class="col-sm-12 form-group">
+      <div class="col-xs-12 form-group">
         <div class="btn-group pull-right">
           <button class="btn btn-danger" type="reset">Cancelar</button>
           <button class="btn btn-default" type="submit">Cadastrar</button>
@@ -131,7 +130,7 @@
     <div class="row">
       <?php
         if ($error!=""){
-          echo '<div class="col-sm-12 form-group alert alert-danger">';
+          echo '<div class="col-xs-12 form-group alert alert-danger">';
           echo $error;
           echo '</div>';
         }
@@ -140,9 +139,9 @@
     
     <!-- Listagem de subtipos -->
     <div class="row justify-content-center">
-      <div class="col-sm-12">
+      <div class="col-xs-12">
         <div class="row">
-          <div class="col-sm-12" style="background-color:gray">Subtipo(s) de investimento existente
+          <div class="col-xs-12" style="background-color:gray">Subtipo(s) de investimento existente
           </div>
         </div>
         <?php
@@ -155,19 +154,19 @@
 </body>
 
 
-
+<!-- --------------------------------------------------------------------------------------- -->
 <!-- Footer -->
 <footer class="container-fluid">
     <div class="container">
         <div class="media-container-row content text-white">
-            <div class="col-12 col-md-3">
+            <div class="col-12 col-xs-3">
                 <div class="media-wrap">
                     <a href="https://xxxxxxxxxx.com">
                         <img src="assets/images/logo24.png" alt="Mobirise">
                     </a>
                 </div>
             </div>
-            <div class="col-12 col-md-3 mbr-fonts-style display-7">
+            <div class="col-12 col-xs-3 mbr-fonts-style display-7">
                 <h5 class="pb-3">
                     Address
                 </h5>
@@ -176,7 +175,7 @@
                     <br>City, AA 99999
                 </p>
             </div>
-            <div class="col-12 col-md-3 mbr-fonts-style display-7">
+            <div class="col-12 col-xs-3 mbr-fonts-style display-7">
                 <h5 class="pb-3">
                     Contacts
                 </h5>
@@ -186,7 +185,7 @@
                     <br>Fax: +1 (0) 000 0000 002
                 </p>
             </div>
-            <div class="col-12 col-md-3 mbr-fonts-style display-7">
+            <div class="col-12 col-xs-3 mbr-fonts-style display-7">
                 <h5 class="pb-3">
                     Links
                 </h5>
