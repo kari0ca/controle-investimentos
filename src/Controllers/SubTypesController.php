@@ -2,7 +2,7 @@
 
 namespace App\Controllers;
 
-class SubTypes extends Controller
+class SubTypesController extends Controller
 {
     public function index()
     {
