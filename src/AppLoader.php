@@ -12,13 +12,14 @@ class AppLoader
 
                 if ($class) {
                     /** @var \App\Controllers\Controller $object */
+                    $class = $class . 'Controller';
                     $object = new $class;
 
                     $object->show();
                 }
             }
         } catch (\Exception $exception) {
-            dump($exception);
+            echo $exception->getMessage();
         }
     }
 }
