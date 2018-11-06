@@ -1,0 +1,4 @@
+<?php
+/**
+ * System front controller.
+ */
