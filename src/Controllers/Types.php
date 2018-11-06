@@ -42,7 +42,7 @@ class Types extends Controller
     public function add()
     {
         $idsubtipo = $_POST["subtipo"];
-        $error = "";
+        $error = '';
 
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $mytipo = mysqli_real_escape_string($db, $_POST['tipo']);
@@ -235,7 +235,7 @@ class Types extends Controller
         <div class="col-xs-6" style="background-color:gray">SubTipo</div>
     </div>
       ';
-        include "Types.php";
+//        include "Types.php";
         echo '</div>
 <p></p>
 </body>
