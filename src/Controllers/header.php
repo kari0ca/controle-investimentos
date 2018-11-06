@@ -42,7 +42,7 @@
 </head>
 <body>
 
-<!-- Barra de navegação -->
+<!-- Barra de navegaÃ§Ã£o -->
 <nav class="navbar navbar-inverse">
   <div class="container-fluid">
     <div class="navbar-header">
@@ -55,7 +55,7 @@
     </div>
     <div class="collapse navbar-collapse" id="myNavbar">
       <ul class="nav navbar-nav">
-        <li class="active"><a href="./index.php">Início</a></li>
+        <li class="active"><a href="./index.php">InÃ­cio</a></li>
         <li><a href="./sobre.php">Sobre</a></li>
         <li><a href="./contato.php">Contato</a></li>
       </ul>
