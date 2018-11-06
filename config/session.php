@@ -1,5 +1,5 @@
 <?php
-$user_check = $_SESSION['login_user'];
+$user_check = $_SESSION['login_user'] ?? null;
 
 $ses_sql = mysqli_query($db, "select iduser, nome, login from investdb.user where login = '$user_check' ");
 
