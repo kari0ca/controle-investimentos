@@ -59,7 +59,7 @@ class Types extends Controller
 
                 // Obtem o maior id_tipo
                 $sql = "SELECT max(idtipoinvest) as idtipo FROM investdb.tipo_invest";
-                $result = mysqli_query($db, $sql) or die(mysql_error());
+                $result = mysqli_query($db, $sql) or die(mysqli_error($db));
                 $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
                 $idtipo = $row[idtipo];
                 $idtipo = $idtipo + 1;

@@ -5,6 +5,13 @@ namespace App\Controllers;
 
 abstract class Controller
 {
+    private $reflection;
+
+    public function __construct()
+    {
+        $this->reflection = new \ReflectionClass($this);
+    }
+
     public function show()
     {
         if ($_GET) {
