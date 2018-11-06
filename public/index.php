@@ -4,6 +4,7 @@
  */
 require_once '../vendor/autoload.php';
 require_once '../config/config.php';
+require_once '../config/session.php';
 
 use App\AppLoader;
 
