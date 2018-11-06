@@ -4,11 +4,11 @@
  */
 require_once '../vendor/autoload.php';
 require_once '../config/config.php';
+session_start();
 require_once '../config/session.php';
 
 use App\AppLoader;
 
-session_start();
 
 $app = new AppLoader();
 $app->run();
