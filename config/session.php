@@ -9,7 +9,6 @@ $loginname_session = $row['nome'];//username
 $login_user = $row['login'];
 $iduser = $row['iduser'];
 
-
 if (!isset($_SESSION['login_user'])) {
     header("location:login.php");
     die('Não ignore meu cabeçalho...');
