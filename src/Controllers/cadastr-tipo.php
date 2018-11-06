@@ -199,7 +199,7 @@
     <div class="col-xs-6" style="background-color:gray">SubTipo</div>
   </div>
   <?php
-    include "get-tipo.php";
+    include "Types.php";
   ?>          
 </div>
 <p></p>

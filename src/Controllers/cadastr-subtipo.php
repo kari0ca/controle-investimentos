@@ -145,7 +145,7 @@
           </div>
         </div>
         <?php
-          include "get-subtipo.php";
+          include "SubTypes.php";
         ?>          
       </div>
     </div>
