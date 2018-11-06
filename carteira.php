@@ -140,13 +140,15 @@
 			</div>
 			<form name = 'myForm'>
 				<div class="row">
-					<div class="col-xs-1"><h4>Filtros</h4>
+					<div class="col-xs-1"><h4>Filtros:</h4>
 					</div>
+				</div>
+				<div class="row">
 					<div class="col-xs-3">Nome:
 						<select class="form-control" name="nome">
 							<option value=""></option>
 							<?php
-								$query = "SELECT distinct(nome) as nome FROM investdb.invest";
+								$query = "select distinct(nome) from investdb.carteira where iduser=".$_SESSION['iduser'];
 								
 								//Execute query
 								$qry_result = mysqli_query($db,$query) or die(mysql_error());
@@ -158,11 +160,29 @@
 							?>
 						</select>
 					</div>
+					<div class="col-xs-3">Entidade:
+						<select class="form-control" name="entidade">
+							<option value=""></option>
+							<?php
+								$query = "select e.identidade, e.entidade from investdb.carteira c, investdb.invest i, investdb.entidade e where c.idinvest = i.idinvest and i.identidade = e.identidade and c.iduser=".$_SESSION['iduser'];
+								$query .= " group by e.identidade, e.entidade";
+								
+								//Execute query
+								$qry_result = mysqli_query($db,$query) or die(mysql_error());
+								$display_string = "";
+								while($row = mysqli_fetch_array($qry_result,MYSQLI_ASSOC)) {
+									$display_string .= '<option value="'. $row[identidade] . '">'. $row[entidade] .'</option>';
+								}
+								echo $display_string;
+							?>
+						</select>
+					</div>
+
 					<div class="col-xs-3">Tipo:
 						<select class="form-control" name="tipo">
 							<option value=""></option>
 							<?php
-								$query = "SELECT distinct(tipo) as tipo FROM investdb.tipo_invest";
+								$query = "select distinct t.tipo from investdb.carteira c, investdb.invest i, investdb.tipo_invest t where c.idinvest = i.idinvest and i.idtipo = t.idtipoinvest and c.iduser=".$_SESSION['iduser'];
 								
 								//Execute query
 								$qry_result = mysqli_query($db,$query) or die(mysql_error());
@@ -180,7 +200,7 @@
 						<select class="form-control" name="subtipo">
 							<option value=""></option>
 							<?php
-								$query = "SELECT distinct(subtipo) as subtipo FROM investdb.sub_tipo_invest";
+								$query = "select distinct s.subtipo from investdb.carteira c, investdb.invest i, investdb.tipo_invest t, investdb.sub_tipo_invest s where c.idinvest = i.idinvest and i.idtipo = t.idtipoinvest and t.idsubtipo = s.idsubtipo and c.iduser=".$_SESSION['iduser'];
 								
 								//Execute query
 								$qry_result = mysqli_query($db,$query) or die(mysql_error());
@@ -193,8 +213,18 @@
 							?>
 					  </select>
 					</div>
-					<div class="col-xs-1">
-						<button class="btn btn-default" type="submit">Filtrar</button>
+				</div>
+				<div class="row">
+					<div class="col-xs-12">
+						<div class="btn-group pull-right" >
+							<a href="cadastr-invest.php" class="btn btn-info">
+								<span class="glyphicon glyphicon-plus-sign"></span> Novo Investimento
+							</a>
+							<a href="cadastr-carteira.php" class="btn btn-info">
+								<span class="glyphicon glyphicon-plus-sign"></span> Gerenciar Carteira
+							</a>
+							<button class="btn btn-default" type="submit">Filtrar</button>
+						</div>
 					</div>
 				</div>
 			</form>

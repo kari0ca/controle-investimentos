@@ -170,7 +170,7 @@
       <div class="col-xs-12 form-group">
         <div class="btn-group pull-right">
           <a href="cadastr-subtipo.php" class="btn btn-info">
-            <span class="glyphicon glyphicon-plus-sign"></span> Novo SubTipo
+            <span class="glyphicon glyphicon-plus-sign"></span> Novo SubTipo de investimento
           </a>
           <button class="btn btn-danger" type="reset">Cancelar</button>
           <button class="btn btn-default" type="submit">Cadastrar</button>
