@@ -5,17 +5,10 @@ namespace App\Controllers;
 
 abstract class Controller
 {
-    private $reflection;
-
-    public function __construct()
-    {
-        $this->reflection = new \ReflectionClass($this);
-    }
-
     public function show()
     {
         if ($_GET) {
-            $class = $_GET['controller'] ?? null;
+            $class = $_GET['controller'] . 'Controller' ?? null;
             $method = $_GET['method'] ?? 'index';
 
             if ($class) {
