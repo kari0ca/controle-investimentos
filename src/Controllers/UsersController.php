@@ -2,51 +2,35 @@
 
 namespace App\Controllers;
 
+use App\Database\Connection;
+
 class UsersController extends Controller
 {
     public function login()
     {
-        echo '<!DOCTYPE html>';
+        $error = '';
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $connection = Connection::open();
 
-        $error = "";
-        if ($_SERVER["REQUEST_METHOD"] == "POST") {
-            // username and password sent from form
+            $statement = $connection->prepare('SELECT `iduser`, `pass` FROM `user` WHERE `login` = :login');
+            $statement->bindParam(':login', $_POST['username'], \PDO::PARAM_STR);
+            $statement->execute();
 
-            $myusername = mysqli_real_escape_string($db, $_POST['username']);
-            $mypassword = mysqli_real_escape_string($db, $_POST['password']);
-
-            $param_password = password_hash($mypassword, PASSWORD_DEFAULT);
-
-            $sql = "SELECT iduser, pass FROM investdb.user WHERE login = '$myusername'";
-            $result = mysqli_query($db, $sql);
-            $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
-            $senha_hash = $row[pass];
-            $active = $row['active'];
-            $iduser = $row[iduser];
+            $result = $statement->fetchObject();
 
             //compara senha com hash
-            if (password_verify($mypassword, $senha_hash)) {
-                //echo "<br>Senha verificada com sucesso";
-            } else {
-                //echo "<br>Senha não verificada";
-            }
+            if (password_verify($_POST['password'], $result->pass)) {
+                $_SESSION["login_user"] = $_POST['username'];
+                $_SESSION["iduser"] = $result->pass;
 
-            $count = mysqli_num_rows($result);
-
-            // If result matched $myusername and $mypassword, table row must be 1 row
-
-            if ($count == 1) {
-                $_SESSION["login_user"] = $myusername;
-                $_SESSION["iduser"] = $iduser;
-                header("location:carteira.php");
-                die('Não ignore meu cabeçalho...');
+                return header("location:carteira.php");
             } else {
                 $error = "Login ou Senha invalidos";
             }
         }
 
-
-        echo '<html lang="en">
+        echo '<!DOCTYPE html>
+        <html lang="en">
         <head>
             <title>Controle de investimentos</title>
             <meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1"/>
@@ -111,13 +95,13 @@ class UsersController extends Controller
                     </form>
                     <div class="row">';
 
-                if ($error != "") {
-                    echo '<div class="col-xs-8 form-group alert alert-danger">';
-                    echo $error;
-                    echo '</div>';
-                }
+        if ($error != "") {
+            echo '<div class="col-xs-8 form-group alert alert-danger">';
+            echo $error;
+            echo '</div>';
+        }
 
-            echo '</div>
+        echo '</div>
 
                     </div>
                 </div>
@@ -176,7 +160,7 @@ class UsersController extends Controller
 
     public function logout()
     {
-        if(session_destroy()) {
+        if (session_destroy()) {
             header("Location: login.php");
         }
         mysqli_close($db);
