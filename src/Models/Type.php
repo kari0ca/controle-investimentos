@@ -4,7 +4,7 @@ namespace App\Models\Tables;
 
 use App\Models\Entities\Type;
 
-class Types
+class Type
 {
     public function add(Type $type)
     {
