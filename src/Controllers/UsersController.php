@@ -23,64 +23,55 @@ class UsersController extends Controller
                 $_SESSION["login_user"] = $_POST['username'];
                 $_SESSION["iduser"] = $result->pass;
 
-                return header('Location: carteira.php');
+                return header('Location: /?controller=App\Controllers\Wallet');
             } else {
                 $error = "Login ou Senha invalidos";
             }
         }
 
         require_once 'header.php';
+        echo '<body>';
+        echo '<!-- Barra de navegação -->';
+        require_once 'menu.php';
+        echo '<!-- Conteúdo -->';
+        echo '    <p></p>';
+        echo '    <span></span>';
+        echo '    <span></span>';
 
-        echo '<body>
-        <!-- Barra de navegação -->';
-         require_once 'menu.php';
-
-        echo '<!-- Conteúdo -->
-        <p></p>
-        <span></span>
-        <span></span>
-
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-xs-12">
-                    <form action="?controller=App\Controllers\Users&method=login" method="post">
-                        <div class="row">
-                            <div class="col-xs-4 form-group">
-                                <input class="form-control" id="login" name="username" placeholder="Login" type="text" required>
-                            </div>
-                            <div class="col-xs-4 form-group">
-                                <input class="form-control" id="pass" name="password" placeholder="Senha" type="password"
-                                       required>
-                            </div>
-        
-                        </div>
-                        <div class="row">
-                            <div class="col-xs-4 form-group text-align:center"><a href="UsersController.php">Cadastrar
-                                    usuário</a></div>
-                            <div class="col-xs-4 form-group">
-                                <button class="btn pull-right align:right" type="submit">Entrar</button>
-                            </div>
-                        </div>
-                    </form>
-                    <div class="row">';
-
-        if ($error != "") {
+        echo '    <div class="container">';
+        echo '        <div class="row justify-content-center">';
+        echo '            <div class="col-xs-12">';
+        echo '                <form action="?controller=App\Controllers\Users&method=login" method="post">';
+        echo '                    <div class="row">';
+        echo '                        <div class="col-xs-4 form-group">';
+        echo '                            <input class="form-control" id="login" name="username" placeholder="Login" type="text" required value="' . ($_POST['username'] ?? null) . '">';
+        echo '                        </div>';
+        echo '                        <div class="col-xs-4 form-group">';
+        echo '                            <input class="form-control" id="pass" name="password" placeholder="Senha" type="password" required value="' . ($_POST['password'] ?? null) . '">';
+        echo '                        </div>';
+        echo '                    </div>';
+        echo '                    <div class="row">';
+        echo '                        <div class="col-xs-4 form-group text-align:center">';
+        echo '                            <a href="UsersController.php">Cadastrar usuário</a></div>';
+        echo '                            <div class="col-xs-4 form-group">';
+        echo '                                <button class="btn btn-default pull-right align:right" type="submit">Entrar</button>';
+        echo '                            </div>';
+        echo '                        </div>';
+        echo '                    </div>';
+        echo '            </form>';
+        echo '            <div class="row">';
+        if (!empty($error)) {
             echo '<div class="col-xs-8 form-group alert alert-danger">';
             echo $error;
             echo '</div>';
         }
-
-        echo '</div>
-
-                    </div>
-                </div>
-            </div>';
-
-        
+        echo '</div>';
+        echo '</div>';
+        echo '</div>';
+        echo '</div>';
         require 'footer.php';
-        echo '            </body>
-
-        </html>';
+        echo '</body>';
+        echo '</html>';
     }
 
     public function logout()
