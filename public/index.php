@@ -9,6 +9,5 @@ require_once '../config/session.php';
 
 use App\AppLoader;
 
-
 $app = new AppLoader();
 $app->run();
