@@ -2,96 +2,16 @@
 
 namespace App\Controllers;
 
+use App\Database\Connection;
+
 class WalletController extends Controller
 {
-    public function getController()
-    {
-        //echo "Entrou no get-carteira.php   ";
-        // Retrieve data from Query String
-        $nome = $_GET['nome'];
-        $tipo = $_GET['tipo'];
-        $subtipo = $_GET['subtipo'];
-
-        // Escape User Input to help prevent SQL Injection
-        $nome = mysqli_real_escape_string($db,$nome);
-        $tipo = mysqli_real_escape_string($db,$tipo);
-        $subtipo = mysqli_real_escape_string($db,$subtipo);
-
-        echo "userid=".$_SESSION['iduser'];
-
-        /*
-        select c.idcarteira, c.idinvest, i.nome, e.entidade, c.data_ini, c.rent_val, c.rent_perc, c.ativo
-    from investdb.carteira c, investdb.invest i, investdb.entidade e
-    where c.idinvest = i.idinvest and i.identidade = e.identidade;
-        */
-
-
-        //build query
-        //$query = "select i.idinvest, i.nome, t.tipo, s.subtipo from investdb.invest i, investdb.tipo_invest t, investdb.sub_tipo_invest s where i.idtipo=t.idtipoinvest and t.idsubtipo=s.idsubtipo";
-        $query = "select c.idcarteira, c.idinvest, i.nome, e.entidade, c.data_ini, c.rent_val, c.rent_perc, c.ativo from investdb.carteira c, investdb.invest i, investdb.entidade e where c.idinvest = i.idinvest and i.identidade = e.identidade";
-        $query .= " and iduser=".$_SESSION['iduser'];
-        if ($nome  != ''){
-            $query .= " and i.nome='".$nome."'";
-        }
-
-        /*  comentario previo de tipo e subtipo
-       if ($tipo  != ''){
-          $query .= " and t.tipo='".$tipo."'";
-       }
-       if ($subtipo  != ''){
-          $query .= " and s.subtipo='".$subtipo."'";
-       }
-        */
-
-
-        //Execute query
-        $qry_result = mysqli_query($db,$query) or die(mysql_error());
-
-        //Build Result String
-        $display_string = "<table class='table table-hover'>";
-        $display_string .= "<thead>";
-        $display_string .= "	<tr>";
-        $display_string .= "		<th>Id</th>";
-        $display_string .= "		<th>Nome</th>";
-        $display_string .= "		<th>Tipo</th>";
-        $display_string .= "		<th>SubTipo</th>";
-        $display_string .= "		<th>Rent Total $</th>";
-        $display_string .= "		<th>Rent Mês %</th>";
-        $display_string .= "		<th>Rent Mês %</th>";
-        $display_string .= "		<th>Ativo</th>";
-        $display_string .= "	</tr>";
-        $display_string .= "</thead>";
-
-
-        // Insert a new row in the table for each person returned
-        while($row = mysqli_fetch_array($qry_result,MYSQLI_ASSOC)) {
-
-            $display_string .= '<thead>';
-            $display_string .= '	<tr>';
-            $display_string .= '		<td>' . $row[idinvest] . '</td>';
-            $display_string .= '		<td>' . $row[nome] . '</td>';
-            $display_string .= '		<td>' . $row[tipo] . '</td>';
-            $display_string .= '		<td>' . $row[subtipo] . '</td>';
-            $display_string .= '		<td></td>';
-            $display_string .= '		<td></td>';
-            $display_string .= '		<td></td>';
-            $display_string .= '		<td></td>';
-            $display_string .= '	</tr>';
-            $display_string .= '</thead>';
-
-            //echo "<br> Id = " . $row[idinvest] . ",";
-        }
-
-        $display_string .= "</table>";
-        echo $display_string;
-    }
-
     public function index()
     {
         echo '<!DOCTYPE html>';
 
-        $idsubtipo = $_POST["subtipo"];
-        $error = "";
+        $idsubtipo = $_POST['subtipo'] ?? null;
+        $error = '';
 
         echo '<!-- AJAX -->
         <script language="javascript" type="text/javascript">
@@ -121,7 +41,7 @@ class WalletController extends Controller
                 // div section in the same page.
         
                 ajaxRequest.onreadystatechange = function () {
-                    if (ajaxRequest.readyState == 4) {
+                    if (ajaxRequest.readyState === 4) {
                         var ajaxDisplay = document.getElementById(\'ajaxDiv\');
                         ajaxDisplay.innerHTML = ajaxRequest.responseText;
                     }
@@ -194,38 +114,40 @@ class WalletController extends Controller
                         <p>
                         <h2>Carteira de Investimentos</h2></p>
                     </div>
-                    <form name="myForm">
+                    <form name="myForm" method="get" action="/?controller=App\Controllers\Wallet">
+                    <input type="hidden" name="controller" value="App\Controllers\Wallet">
                         <div class="row">
                             <div class="col-xs-1"><h4>Filtros</h4>
                             </div>
                             <div class="col-xs-3">Nome:
                                 <select class="form-control" name="nome">
                                     <option value=""></option>';
-        $query = "SELECT distinct(nome) as nome FROM investdb.invest";
 
-        //Execute query
-        $qry_result = mysqli_query($db, $query) or die(mysql_error());
-        $display_string = "";
-        while ($row = mysqli_fetch_array($qry_result, MYSQLI_ASSOC)) {
-            $display_string .= '<option value="' . $row[nome] . '">' . $row[nome] . '</option>';
+        $connection = Connection::open();
+
+        $statement = $connection->query('SELECT distinct(`nome`) as `nome` FROM `invest`');
+        $statement->execute();
+
+        $display_string = '';
+        while ($result = $statement->fetchObject()) {
+            $display_string .= '<option value="' . $result->nome . '">' . $result->nome . '</option>';
         }
         echo $display_string;
 
-        echo '</select>
-                    </div>
+        echo '</select>';
+
+        echo '</div>
                     <div class="col-xs-3">Tipo:
                         <select class="form-control" name="tipo">
                             <option value=""></option>';
 
-        $query = "SELECT distinct(tipo) as tipo FROM investdb.tipo_invest";
-
-        //Execute query
-        $qry_result = mysqli_query($db, $query) or die(mysql_error());
+        $statement = $connection->query('SELECT distinct(`tipo`) as `tipo` FROM `tipo_invest`');
+        $statement->execute();
 
         //Build Result String
-        $display_string = "";
-        while ($row = mysqli_fetch_array($qry_result, MYSQLI_ASSOC)) {
-            $display_string .= '<option value="' . $row[tipo] . '">' . $row[tipo] . '</option>';
+        $display_string = '';
+        while ($result = $statement->fetchObject()) {
+            $display_string .= '<option value="' . $result->tipo . '">' . $result->tipo . '</option>';
         }
         echo $display_string;
 
@@ -235,14 +157,15 @@ class WalletController extends Controller
                         <select class="form-control" name="subtipo">
                             <option value=""></option>';
 
-        $query = "SELECT distinct(subtipo) as subtipo FROM investdb.sub_tipo_invest";
+
+        $statement = $connection->query('SELECT distinct(`subtipo`) as `subtipo` FROM `sub_tipo_invest`');
+        $statement->execute();
 
         //Execute query
-        $qry_result = mysqli_query($db, $query) or die(mysql_error());
         //Build Result String
         $display_string = "";
-        while ($row = mysqli_fetch_array($qry_result, MYSQLI_ASSOC)) {
-            $display_string .= '<option value="' . $row[subtipo] . '">' . $row[subtipo] . '</option>';
+        while ($result = $statement->fetchObject()) {
+            $display_string .= '<option value="' . $result->subtipo . '">' . $result->subtipo . '</option>';
         }
         echo $display_string;
 
@@ -254,15 +177,79 @@ class WalletController extends Controller
                 </div>
             </form>
             <br><br>
-            <div id="ajaxDiv">
-                <?php
-                include "get-carteira.php";
-                ?>
-            </div>
+            <div id="ajaxDiv">';
+                
+                $this->getWallet();
+                
+            echo '</div>
         </div>
     </div>
 </div>
 <p></p>
 </body>';
     }
+
+
+    public function getWallet()
+    {
+        //echo "Entrou no get-carteira.php   ";
+        // Retrieve data from Query String
+        $nome = $_GET['nome'] ?? null;
+        $tipo = $_GET['tipo'] ?? null;
+        $subtipo = $_GET['subtipo'] ?? null;
+
+        $connection = Connection::open();
+
+        $query = "select c.idcarteira, c.idinvest, i.nome, e.entidade, c.data_ini, c.rent_val, c.rent_perc, c.ativo from investdb.carteira c, investdb.invest i, investdb.entidade e where c.idinvest = i.idinvest and i.identidade = e.identidade";
+        $query .= ' and iduser = :iduser';
+        if (!empty($nome)) {
+            $query .= ' and i.nome = :nome';
+        }
+
+        $statement = $connection->prepare($query);
+        $statement->bindParam(':iduser', $_SESSION['iduser'], \PDO::PARAM_INT);
+        if (!empty($nome)) {
+            $statement->bindParam(':nome', $nome, \PDO::PARAM_STR);
+        }
+
+        //Build Result String
+        $display_string = "<table class='table table-hover'>";
+        $display_string .= "<thead>";
+        $display_string .= "	<tr>";
+        $display_string .= "		<th>Id</th>";
+        $display_string .= "		<th>Nome</th>";
+        $display_string .= "		<th>Tipo</th>";
+        $display_string .= "		<th>SubTipo</th>";
+        $display_string .= "		<th>Rent Total $</th>";
+        $display_string .= "		<th>Rent Mês %</th>";
+        $display_string .= "		<th>Rent Mês %</th>";
+        $display_string .= "		<th>Ativo</th>";
+        $display_string .= "	</tr>";
+        $display_string .= "</thead>";
+
+
+        // Insert a new row in the table for each person returned
+        while ($result = $statement->fetchObject()) {
+
+            $display_string .= '<thead>';
+            $display_string .= '	<tr>';
+            $display_string .= '		<td>' . $result->idinvest . '</td>';
+            $display_string .= '		<td>' . $result->nome . '</td>';
+            $display_string .= '		<td>' . $result->tipo . '</td>';
+            $display_string .= '		<td>' . $result->subtipo . '</td>';
+            $display_string .= '		<td></td>';
+            $display_string .= '		<td></td>';
+            $display_string .= '		<td></td>';
+            $display_string .= '		<td></td>';
+            $display_string .= '	</tr>';
+            $display_string .= '</thead>';
+
+            //echo "<br> Id = " . $row[idinvest] . ",";
+        }
+
+        $display_string .= "</table>";
+        echo $display_string;
+    }
+
+
 }
