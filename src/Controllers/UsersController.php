@@ -21,7 +21,7 @@ class UsersController extends Controller
             //compara senha com hash
             if (password_verify($_POST['password'], $result->pass)) {
                 $_SESSION["login_user"] = $_POST['username'];
-                $_SESSION["iduser"] = $result->pass;
+                $_SESSION["iduser"] = $result->iduser;
 
                 return header('Location: /?controller=App\Controllers\Wallet');
             } else {
