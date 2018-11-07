@@ -1,17 +1,23 @@
 <?php
+if (!isset($_SESSION['login_user'])) {
+    if(!isset($_GET['method']) && $_GET['method'] !== 'login') {
+        header("Location: ?controller=App\Controllers\Users&method=login");
+        die();
+    }
+}
+
 $user_check = $_SESSION['login_user'] ?? null;
 
-$ses_sql = mysqli_query($db, "select iduser, nome, login from investdb.user where login = '$user_check' ");
+$connection = \App\Database\Connection::open();
 
-$row = mysqli_fetch_array($ses_sql, MYSQLI_ASSOC);
+$statement = $connection->prepare('SELECT `iduser`, `nome`, `login` FROM `user` WHERE login = :login');
+$statement->bindParam(':login', $user_check, \PDO::PARAM_STR);
+$statement->execute();
 
-$loginname_session = $row['nome'];//username
-$login_user = $row['login'];
-$iduser = $row['iduser'];
+$result = $statement->fetchObject();
+
+//$loginname_session = $row['nome'];//username
+//$login_user = $row['login'];
+//$iduser = $row['iduser'];
 
 
-if (!isset($_SESSION['login_user'])) {
-    header("location:login.php");
-    die('Não ignore meu cabeçalho...');
-}
-?>
