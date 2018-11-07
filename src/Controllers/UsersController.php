@@ -23,7 +23,7 @@ class UsersController extends Controller
                 $_SESSION["login_user"] = $_POST['username'];
                 $_SESSION["iduser"] = $result->pass;
 
-                return header("location:carteira.php");
+                return header('Location: carteira.php');
             } else {
                 $error = "Login ou Senha invalidos";
             }
