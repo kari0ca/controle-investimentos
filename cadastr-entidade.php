@@ -1,11 +1,15 @@
 <!DOCTYPE html>
 <?php
-   include("config.php");
-   session_start();
+	include("config.php");
+	session_start();
+  
+	if(!isset($_SESSION['login_user'])){
+	   header("location:login.php"); die('Não ignore meu cabeçalho...');
+	}
    
-   $error="";
-   if($_SERVER["REQUEST_METHOD"] == "POST") {
-      $entidade = mysqli_real_escape_string($db,$_POST['nome']);
+	$error="";
+	if($_SERVER["REQUEST_METHOD"] == "POST") {
+		$entidade = mysqli_real_escape_string($db,$_POST['nome']);
 		// Procura por Entidade com o mesmo nome
 		$sql = "SELECT entidade FROM investdb.entidade WHERE entidade = '$entidade'";
 		$result = mysqli_query($db,$sql);
@@ -31,7 +35,7 @@
 				echo "Error: " . $sql_insert . "<br>" . mysqli_error($db);
 			}
 		}
-   }
+	}
 
 ?>
 
@@ -79,49 +83,44 @@
 	</head>
 <body>
 
-<!-- Barra de navegação -->
-<nav class="navbar navbar-inverse">
-  <div class="container-fluid">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>                        
-      </button>
-      <a class="navbar-brand" href="#">Logo</a>
-    </div>
-    <div class="collapse navbar-collapse" id="myNavbar">
-      <ul class="nav navbar-nav">
-        <li class="active"><a href="./index.php">Início</a></li>
-        <li><a href="./sobre.php">Sobre</a></li>
-        <li><a href="./contato.php">Contato</a></li>
-      </ul>
-      <ul class="nav navbar-nav navbar-right">
-        <li><a href="./login.php"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
-      </ul>
-    </div>
-  </div>
-</nav>
+	<!-- Barra de navegação -->
+	<nav class="navbar navbar-inverse">
+	  <div class="container-fluid">
+	    <div class="navbar-header">
+		 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+		   <span class="icon-bar"></span>
+		   <span class="icon-bar"></span>
+		   <span class="icon-bar"></span>                        
+		 </button>
+		 <a class="navbar-brand" href="#">Logo</a>
+	    </div>
+	    <div class="collapse navbar-collapse" id="myNavbar">
+		 <ul class="nav navbar-nav">
+		   <li class="active"><a href="./index.php">Início</a></li>
+		   <li><a href="./sobre.php">Sobre</a></li>
+		   <li><a href="./contato.php">Contato</a></li>
+		 </ul>
+		 <ul class="nav navbar-nav navbar-right">
+		   <li><a href="./login.php"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+		 </ul>
+	    </div>
+	  </div>
+	</nav>
     
 
-<!-- Conteúdo -->
-<p></p>
-<span></span>
-<span></span>
-
-
-<div class="container">
-	<div class="row justify-content-center">
-		<div class="col-xs-12">
-			<form action = "" method = "post">
+	<!-- Conteúdo -->
+	<div class="container">
+		<div class="row justify-content-center">
+			<form action = "" method = "post" name = "FormCadastroEntidade">
+				<p><h3>Cadastro de Entidade Gestora de Investimento</h3></p>
 				<div class="row">
 					<div class="col-xs-8 form-group">
 						<input class="form-control" id="nome" name="nome" placeholder="Entidade Gestora" type="text" required>
 					</div>
 					<div class="col-xs-4 form-group">
 						<div class="btn-group pull-right" >
-							<button class="btn btn-danger" type="reset">Cancelar</button>
-							<button class="btn btn-default" type="submit">Cadastrar</button>
+							<button class="btn btn-danger btn-sm" type="reset">Cancelar</button>
+							<button class="btn btn-default btn-sm" type="submit">Cadastrar</button>
 						</div>
 					</div>
 				</div>
@@ -142,10 +141,9 @@
 			<?php
 				include "get-entidade.php";
 			?>   
-      </div>
-   </div>
-</div>
-<br>
+		</div>
+	</div>
+	<br>
 </body>
 
 

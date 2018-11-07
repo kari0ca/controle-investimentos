@@ -56,14 +56,16 @@
    
    // Insert a new row in the table for each person returned
    while($row = mysqli_fetch_array($qry_result,MYSQLI_ASSOC)) {
-      
+      //Manipulação da data para o formato DD/MM/YYYY
+	 $trat_data_ini = substr($row[data_ini], -2)."/".substr($row[data_ini], 4, 2)."/".substr($row[data_ini],0,4) ;
+	 //echo "<br>Data Orig = ".$row[data_ini].", Data Tratada=".$trat_data_ini;
       $display_string .= "<thead>";
       $display_string .= "	<tr>";
       $display_string .= "		<td>" . $row[nome] . "</td>";
       $display_string .= "		<td>" . $row[entidade] . "</td>";
       $display_string .= "		<td>" . $row[tipo] . "</td>";
       $display_string .= "		<td>" . $row[subtipo] . "</td>";
-      $display_string .= "		<td>" . $row[data_ini] . "</td>";
+      $display_string .= "		<td>" . $trat_data_ini . "</td>";
       $display_string .= "		<td>" . $row[rent_val] . "</td>";
       $display_string .= "		<td>" . $row[rent_perc] . "</td>";
 		if ($row[ativo]==1){

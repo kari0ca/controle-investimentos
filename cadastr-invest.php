@@ -3,6 +3,10 @@
 	include("config.php");
 	session_start();
 	
+	if(!isset($_SESSION['login_user'])){
+	   header("location:login.php"); die('Não ignore meu cabeçalho...');
+	}
+
 	$error="";
 	if($_SERVER["REQUEST_METHOD"] == "POST") {
 		$nomeinv = mysqli_real_escape_string($db,$_POST['nome']);
@@ -44,15 +48,15 @@
 
 ?>
  
-<html lang="en">
+ <html lang="en">
 <head>
-   <title>Controle de investimentos</title>
-   <meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1" />
-   <meta name="viewport" content="width=device-width, initial-scale=1">
-   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-   <style>
+	<title>Controle de investimentos</title>
+	<meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1" />
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<style>
      /* Remove the navbar's default margin-bottom and rounded borders */ 
      .navbar {
        margin-bottom: 0;
@@ -88,41 +92,36 @@
 </head>
 <body>
  
-<!-- Barra de navegação -->
-<nav class="navbar navbar-inverse">
-   <div class="container-fluid">
-		<div class="navbar-header">
-			<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-				<span class="icon-bar"></span>
-				<span class="icon-bar"></span>
-				<span class="icon-bar"></span>                        
-			</button>
-			<a class="navbar-brand" href="#">Logo</a>
-		</div>
-		<div class="collapse navbar-collapse" id="myNavbar">
-			<ul class="nav navbar-nav">
-				<li class="active"><a href="./index.php">Início</a></li>
-				<li><a href="./sobre.php">Sobre</a></li>
-				<li><a href="./contato.php">Contato</a></li>
-			</ul>
-			<ul class="nav navbar-nav navbar-right">
-				<li><a href="./login.php"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
-			</ul>
-		</div>
-   </div>
-</nav>
+	<!-- Barra de navegação -->
+	<nav class="navbar navbar-inverse">
+	   <div class="container-fluid">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>                        
+				</button>
+				<a class="navbar-brand" href="#">Logo</a>
+			</div>
+			<div class="collapse navbar-collapse" id="myNavbar">
+				<ul class="nav navbar-nav">
+					<li class="active"><a href="./index.php">Início</a></li>
+					<li><a href="./sobre.php">Sobre</a></li>
+					<li><a href="./contato.php">Contato</a></li>
+				</ul>
+				<ul class="nav navbar-nav navbar-right">
+					<li><a href="./login.php"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+				</ul>
+			</div>
+	   </div>
+	</nav>
      
  
-<!-- Conteúdo -->
-<p></p>
-<span></span>
-<span></span>
-
- 
-<div class="container">
-	<div class="row justify-content-center">
-		<div class="col-xs-12">
-			<form action = "" method = "post">
+	<!-- Conteúdo -->
+	<div class="container">
+		<div class="row justify-content-center">
+			<form action = "" method = "post" name = "FormCadastroInvestimento">
+				<p><h3>Cadastro de Investimento</h3></p>
 				<div class="row">
 					<div class="col-xs-4 form-group">
 						<input class="form-control" id="nome" name="nome" placeholder="Nome do investimento" type="text" required>
@@ -178,14 +177,14 @@
 				<div class="row">
 					<div class="col-xs-12 form-group">
 						<div class="btn-group pull-right" >
-							<a href="cadastr-tipo.php" class="btn btn-info">
+							<a href="cadastr-tipo.php" class="btn btn-info btn-sm">
 								<span class="glyphicon glyphicon-plus-sign"></span> Novo Tipo Investimento
 							</a>
-							<a href="cadastr-entidade.php" class="btn btn-info">
+							<a href="cadastr-entidade.php" class="btn btn-info btn-sm">
 								<span class="glyphicon glyphicon-plus-sign"></span> Nova Entidade Gestora
 							</a>
-							<button class="btn btn-danger" type="reset">Cancelar</button>
-							<button class="btn btn-default" type="submit">Cadastrar</button>
+							<button class="btn btn-danger btn-sm" type="reset">Cancelar</button>
+							<button class="btn btn-default btn-sm" type="submit">Cadastrar</button>
 						</div>
 					</div>
 				</div>
@@ -208,12 +207,10 @@
 			</div>
 			<?php
 				include "get-invest.php";
-			?>   
+			?>
+			<br>
 		</div>
 	</div>
-     
-	
-</div>
 </body>
  
  

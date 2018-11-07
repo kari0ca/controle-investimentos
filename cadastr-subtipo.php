@@ -1,37 +1,41 @@
 <!DOCTYPE html>
 <?php
-   include("config.php");
-   session_start();
-   
-   $error="";
-   if($_SERVER["REQUEST_METHOD"] == "POST") {
-      $mysubtipo = mysqli_real_escape_string($db,$_POST['subtipo']);
-      
-      // Procura por subtipos de investimento com o mesmo nome
-      $sql = "SELECT subtipo FROM investdb.sub_tipo_invest WHERE subtipo = '$mysubtipo'";
-      $result = mysqli_query($db,$sql);
-      $row = mysqli_fetch_array($result,MYSQLI_ASSOC);
-      //$active = $row['active'];
-      
-      $count = mysqli_num_rows($result);
-      if($count >= 1) {
-        $error="Já existe um Sub Tipo de Investimento com este nome";
-      }
-      else {
-        
-        // Obtem o maior idsubtipo
-        $sql = "SELECT max(idsubtipo) as idsubtipo FROM investdb.sub_tipo_invest";
-        $result = mysqli_query($db,$sql) or die(mysql_error());
-        $row = mysqli_fetch_array($result,MYSQLI_ASSOC);
-        $idsubtipo = $row[idsubtipo];
-        $idsubtipo = $idsubtipo + 1;
-        
-        $sql_insert = "INSERT INTO investdb.sub_tipo_invest values(".$idsubtipo.",'".$mysubtipo."')";
-        if (!mysqli_query($db, $sql_insert)) {
-          echo "Error: " . $sql_insert . "<br>" . mysqli_error($db);
-        } 
-      }
-   }
+	include("config.php");
+	session_start();
+
+	if(!isset($_SESSION['login_user'])){
+	   header("location:login.php"); die('Não ignore meu cabeçalho...');
+	}
+	
+	$error="";
+	if($_SERVER["REQUEST_METHOD"] == "POST") {
+		$mysubtipo = mysqli_real_escape_string($db,$_POST['subtipo']);
+		
+		// Procura por subtipos de investimento com o mesmo nome
+		$sql = "SELECT subtipo FROM investdb.sub_tipo_invest WHERE subtipo = '$mysubtipo'";
+		$result = mysqli_query($db,$sql);
+		$row = mysqli_fetch_array($result,MYSQLI_ASSOC);
+		//$active = $row['active'];
+		
+		$count = mysqli_num_rows($result);
+		if($count >= 1) {
+		  $error="Já existe um Sub Tipo de Investimento com este nome";
+		}
+		else {
+			
+			// Obtem o maior idsubtipo
+			$sql = "SELECT max(idsubtipo) as idsubtipo FROM investdb.sub_tipo_invest";
+			$result = mysqli_query($db,$sql) or die(mysql_error());
+			$row = mysqli_fetch_array($result,MYSQLI_ASSOC);
+			$idsubtipo = $row[idsubtipo];
+			$idsubtipo = $idsubtipo + 1;
+			
+			$sql_insert = "INSERT INTO investdb.sub_tipo_invest values(".$idsubtipo.",'".$mysubtipo."')";
+			if (!mysqli_query($db, $sql_insert)) {
+				echo "Error: " . $sql_insert . "<br>" . mysqli_error($db);
+			} 
+		}
+	}
 ?>
 
 <html lang="en">
@@ -78,79 +82,78 @@
 </head>
 <body>
 
-  <!-- Barra de navegação -->
-  <nav class="navbar navbar-inverse">
-    <div class="container-fluid">
-      <div class="navbar-header">
-        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>                        
-        </button>
-        <a class="navbar-brand" href="#">Logo</a>
-      </div>
-      <div class="collapse navbar-collapse" id="myNavbar">
-        <ul class="nav navbar-nav">
-          <li class="active"><a href="./index.php">Início</a></li>
-          <li><a href="./sobre.php">Sobre</a></li>
-          <li><a href="./contato.php">Contato</a></li>
-        </ul>
-        <ul class="nav navbar-nav navbar-right">
-          <li><a href="./login.php"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
-          <li><a href="./logout.php"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
-        </ul>
-      </div>
-    </div>
-  </nav>
+	<!-- Barra de navegação -->
+	<nav class="navbar navbar-inverse">
+	  <div class="container-fluid">
+	    <div class="navbar-header">
+		 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+		   <span class="icon-bar"></span>
+		   <span class="icon-bar"></span>
+		   <span class="icon-bar"></span>                        
+		 </button>
+		 <a class="navbar-brand" href="#">Logo</a>
+	    </div>
+	    <div class="collapse navbar-collapse" id="myNavbar">
+		 <ul class="nav navbar-nav">
+		   <li class="active"><a href="./index.php">Início</a></li>
+		   <li><a href="./sobre.php">Sobre</a></li>
+		   <li><a href="./contato.php">Contato</a></li>
+		 </ul>
+		 <ul class="nav navbar-nav navbar-right">
+		   <li><a href="./login.php"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+		   <li><a href="./logout.php"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+		 </ul>
+	    </div>
+	  </div>
+	</nav>
       
   
-  <!-- Conteúdo -->
-  <p></p>
-  <span></span>
-  <span></span>
+	<!-- Conteúdo -->
   
-  
-  <div class="container">
-    <form action = "" method = "post">
-      <div class="row">
-        <div class="col-xs-12 form-group">
-          <input class="form-control" id="subtipo" name="subtipo" placeholder="Sub Tipo de Investimento" type="text" required>
-        </div>
-      </div>
-    <div class="row">
-      <div class="col-xs-12 form-group">
-        <div class="btn-group pull-right">
-          <button class="btn btn-danger" type="reset">Cancelar</button>
-          <button class="btn btn-default" type="submit">Cadastrar</button>
-        </div>
-      </div>
-    </div>
-      
-    </form>
-    <div class="row">
-      <?php
-        if ($error!=""){
-          echo '<div class="col-xs-12 form-group alert alert-danger">';
-          echo $error;
-          echo '</div>';
-        }
-      ?>
-    </div>
-    
-    <!-- Listagem de subtipos -->
-    <div class="row justify-content-center">
-      <div class="col-xs-12">
-        <div class="row">
-          <div class="col-xs-12" style="background-color:gray">Subtipo(s) de investimento existente
-          </div>
-        </div>
-        <?php
-          include "get-subtipo.php";
-        ?>          
-      </div>
-    </div>
-  </div>
-  <p></p>
+	<div class="container">
+		<div class="row justify-content-center"> 
+			<form action = "" method = "post" name = "FormCadastroSubtipo">
+				<p><h3>Cadastro de Subtipo de Investimento</h3></p>
+				<div class="row">
+					<div class="col-xs-12 form-group">
+						<input class="form-control" id="subtipo" name="subtipo" placeholder="Sub Tipo de Investimento" type="text" required>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-12 form-group">
+						<div class="btn-group pull-right">
+							<button class="btn btn-danger btn-sm" type="reset">Cancelar</button>
+							<button class="btn btn-default btn-sm" type="submit">Cadastrar</button>
+						</div>
+					</div>
+				</div>
+			</form>
+			<div class="row">
+				<?php
+					if ($error!=""){
+						echo '<div class="col-xs-12 form-group alert alert-danger">';
+						echo $error;
+						echo '</div>';
+					}
+				?>
+			</div>
+			
+			<!-- Listagem de subtipos -->
+			<div class="row justify-content-center">
+				<div class="col-xs-12">
+					<div class="row">
+						<div class="col-xs-12" style="background-color:gray">Subtipo(s) de investimento existente
+						</div>
+					</div>
+						<?php
+							include "get-subtipo.php";
+						?>          
+				</div>
+			</div>
+		</div>
+	</div>
+	<br>
+
 </body>
 
 

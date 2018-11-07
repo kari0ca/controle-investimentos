@@ -26,14 +26,14 @@
    
    // Insert a new row in the table for each person returned
    while($row = mysqli_fetch_array($qry_result,MYSQLI_ASSOC)) {
-      
+      $trat_data_ini = substr($row[data_ini], -2)."/".substr($row[data_ini], 4, 2)."/".substr($row[data_ini],0,4);
       $display_string .= "<thead>";
       $display_string .= "	<tr>";
       $display_string .= "		<td>" . $row[nome] . "</td>";
       $display_string .= "		<td>" . $row[entidade] . "</td>";
       $display_string .= "		<td>" . $row[tipo] . "</td>";
       $display_string .= "		<td>" . $row[subtipo] . "</td>";
-      $display_string .= "		<td>" . $row[data_ini] . "</td>";
+      $display_string .= "		<td>" . $trat_data_ini . "</td>";
       $display_string .= "		<td>" . $row[val_ini] . "</td>";
 		if ($row[ativo]==1){
 			$display_string .= "		<td><input type='checkbox' value='' checked disabled></td>";

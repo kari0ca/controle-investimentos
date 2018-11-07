@@ -2,65 +2,61 @@
 <?php
 	include("config.php");
 	session_start();
-
+	
 	if(!isset($_SESSION['login_user'])){
 	   header("location:login.php"); die('Não ignore meu cabeçalho...');
 	}
 	
+	$count = $_SESSION['count_inv'];
 	$error="";
 	if($_SERVER["REQUEST_METHOD"] == "POST") {
-		$idinv = mysqli_real_escape_string($db,$_POST['investimento']);
-		$dataini = mysqli_real_escape_string($db,$_POST['dataini']);
-		$datafinal = mysqli_real_escape_string($db,$_POST['datafim']);
-		$val = mysqli_real_escape_string($db,$_POST['valorini']);
-		$notas = mysqli_real_escape_string($db,$_POST['notas']);
-		$ativo = mysqli_real_escape_string($db,$_POST['ativo']);
-		$ativo2 = mysqli_real_escape_string($db,$_POST['ativo2']);
-		$user = $_SESSION['iduser'];
+		$dataref = mysqli_real_escape_string($db,$_POST['dataref']);
+		//echo "<br>Dataref sem tratamento=".$dataref;
+		$val=array();
+		$idcarteira=array();
+		for ($i = 0; $i <= $count; $i++) {
+			array_push($val,mysqli_real_escape_string($db,$_POST['val'.$i]));
+			array_push($idcarteira,mysqli_real_escape_string($db,$_POST['idcarteira'.$i]));
+			//echo "<br>Inseriu o valor:".mysqli_real_escape_string($db,$_POST['val'.$i])." do IDcarteira:". mysqli_real_escape_string($db,$_POST['idcarteira'.$i]) .", na posição ".$i;
+		}
 		
+		//echo "<br>Valores: Val1=".$val1." Val2=".$val2." Val3=".$val3;
+		
+		//echo "<br> valor formatado=".number_format($val[2],2,",",".");
 		//tratamento das variaveis
-		//Flag Ativo
-		if ($ativo2 == 'true'){
-		 $ativo=1;
-		}
-		else {
-		 $ativo=0;
-		}
-       
+      
 		//Datas
-		$arraydata = explode('/', $dataini);
+		
+		$arraydata = explode('/', $dataref);
 		$day = $arraydata[0];
 		$month = $arraydata[1];
 		$year  = $arraydata[2];
 		if(!checkdate ($month, $day , $year)){
-			$error ="Data Inicial Inválida";
+			$error ="Data de Referência Inválida";
 		}
 		else {
-			$dataini=$year.$month.$day;
+			$dataref=$year.$month.$day;
+			//echo "<br>Dataref tratada=".$dataref;
 		}
 		
-		if (!empty($datafinal)){
-			$arraydata = explode('/', $datafinal);
-			$day = $arraydata[0];
-			$month   = $arraydata[1];
-			$year  = $arraydata[2];
-			if(!checkdate ($month, $day , $year)){
-				if (!empty($error)){
-					$error = "Data final Inválida";
-				}
-				else {
-					$error = $error." e Data final Inválida";
-				}
+		// Procura pela chave da carteira (idinvest, iduser, dataini)
+		for ($i = 0; $i <= $count; $i++) {
+
+			//$sql = "SELECT idcarteira, data_fato FROM investdb.inv_fato WHERE idcarteira= ".$idcarteira[$i]." and data_fato= ".$dataref;
+			if (!empty($val[$i])){
+				$sql_insert = "INSERT INTO investdb.inv_fato VALUES (".$idcarteira[$i].",".$dataref.",'".$val[$i]."') ON DUPLICATE KEY UPDATE val_invest='".$val[$i]."'";
+				//echo "<br>SQL = ".$sql;
+				if (!mysqli_query($db, $sql_insert)) {
+					echo "Error: " . $sql_insert . "<br>" . mysqli_error($db);
+				}				
 			}
 			else {
-				$datafinal=$year.$month.$day;
+				//echo "<br>Valor vazio no idcarteira ".$idcarteira[$i];
+				
 			}
 		}
-		else {
-		  $datafinal="null";
-		}
-
-		// Procura pela chave da carteira (idinvest, iduser, dataini)
+		
+		/*
 		$sql = "SELECT idcarteira FROM investdb.carteira WHERE idinvest= $idinv and iduser= $user and data_ini= $dataini";
 		$result = mysqli_query($db,$sql);
 		$row = mysqli_fetch_array($result,MYSQLI_ASSOC);
@@ -93,6 +89,7 @@
 			}
 			
 		}
+		*/
 	}
 
 ?>
@@ -169,68 +166,60 @@
 	<!-- Conteúdo -->
 	<div class="container">
 		<div class="row justify-content-center">
-			<form action = "" method = "post" name = "FormCadastroCarteira">
-				<p><h3>Configuraçãao da Carteira de Investimento</h3></p>
+			<form action = "" method = "post" name = "FormValorCarteira">
+				<p><h3>Leitura de valores da Carteira de Investimento</h3></p>
 				<div class="row">
 					<div class="col-xs-12 form-group">
-						<label for="investimento">Investimento</label>
-						<select class="form-control" name="investimento">
-							<?php
-								 $query = "select i.idinvest, i.nome, e.entidade, t.tipo, s.subtipo from investdb.invest i, investdb.entidade e, investdb.tipo_invest t, investdb.sub_tipo_invest s where i.identidade = e.identidade and i.idtipo = t.idtipoinvest and t.idsubtipo = s.idsubtipo";
-								
-								//Execute query
-								$qry_result = mysqli_query($db,$query) or die(mysql_error());
-								
-								//Build Result String
-								$display_string = "";
-								
-								// Insert a new row in the table for each person returned
-								while($row = mysqli_fetch_array($qry_result,MYSQLI_ASSOC)) {
-									$display_string .= "<option value='". $row[idinvest] . "'>". $row[nome] ." - " . $row[entidade] ." - " . $row[tipo] ." - " . $row[subtipo] ."</option>";
-								}
-								echo $display_string;
-							?>
-						</select>
-						<!-- <input class="form-control" id="entidade" name="entidade" placeholder="Entidade gestora" type="text" required>
-						-->
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-xs-3 form-group">
-						<input class="form-control" id="dataini" name="dataini" placeholder="Data inicial DD/MM/AAAA" type="text" required>
-					</div>
-					<div class="col-xs-3 form-group">
-						<input class="form-control" id="datafim" name="datafim" placeholder="Data final DD/MM/AAAA" type="text" >
-					</div>
-					<div class="col-xs-3 form-group">
-						<input class="form-control" id="valorini" name="valorini" placeholder="Valor investido" type="text" >
-					</div>
-					<div class="col-xs-3 form-group">
-						<input type="hidden" id="ativo2" name="ativo2" value="false">
-						<input class="form-check-input" id="ativo" name="ativo" placeholder="ativo" type="checkbox" value="" onChange="check();"/> Ativo
-						<script language="javascript">
-							function check() {
-							 document.getElementById("ativo2").value = $('#ativo').prop('checked');
-							}
-						</script>
+						<div class='col-xs-9'><span class="pull-right">Data de Referência</span>
+						</div>	
+						<div class='col-xs-3'>
+							<input class="form-control" id="dataref" name="dataref" placeholder="DD/MM/AAAA" type="text" required>
+						</div>
 					</div>
 				</div>
 				<div class="row">
 					<div class="col-xs-12 form-group">
-						<input class="form-control" id="notas" name="notas" placeholder="Notas sobre o investimento" type="text" >
+						<?php
+							$query = "select c.idcarteira, c.nome, e.entidade, c.data_ini from investdb.carteira c, investdb.invest i, investdb.entidade e where c.idinvest=i.idinvest and i.identidade=e.identidade  ";
+							$query .= " and iduser=".$_SESSION['iduser'];
+								
+							//Execute query
+							$qry_result = mysqli_query($db,$query) or die(mysql_error());
+							
+							//guarda quantidade de linhas
+							$count = mysqli_num_rows($qry_result);
+							$_SESSION["count_inv"]= $count;
+							
+							//Build Result String
+							$i=1;
+							$display_string  = "<div class='row'>";
+							$display_string .= "	<div class='col-xs-4' style='background-color:gray'>Nome</div>";
+							$display_string .= "	<div class='col-xs-3' style='background-color:gray'>Entidade</div>";
+							$display_string .= "	<div class='col-xs-2' style='background-color:gray'>Data Inicial</div>";
+							$display_string .= "	<div class='col-xs-3' style='background-color:gray'>Valor</div>";
+							$display_string .= "</div>";
+							
+							while($row = mysqli_fetch_array($qry_result,MYSQLI_ASSOC)) {
+								$trat_data_ini = substr($row[data_ini], -2)."/".substr($row[data_ini], 4, 2)."/".substr($row[data_ini],0,4);
+								$display_string .= "    <div class='row'>";
+								$display_string .= "       <div class='col-xs-4'>". $row[nome] ."</div>";
+								$display_string .= "       <div class='col-xs-3'>". $row[entidade] ."</div>";
+								$display_string .= "       <div class='col-xs-2'>". $trat_data_ini ."</div>";
+								$display_string .= "       <div class='col-xs-3'><input class='form-control' id='val".$i."' name='val".$i."' placeholder='Valor' type='text'></div>";
+								$display_string .= "       <input type='hidden' id='idcarteira".$i."' name='idcarteira".$i."' value=". $row[idcarteira] .">";
+								$display_string .= "    </div>";
+								$i = $i+1;
+							}							
+							echo $display_string;
+							
+						?>
 					</div>
 				</div>
 				<div class="row">
 					<div class="col-xs-12 form-group">
 						<div class="btn-group pull-right" >
-							<a href="cadastr-tipo.php" class="btn btn-info btn-sm">
-								<span class="glyphicon glyphicon-plus-sign"></span> Novo Tipo Investimento
-							</a>
-							<a href="cadastr-entidade.php" class="btn btn-info btn-sm">
-								<span class="glyphicon glyphicon-plus-sign"></span> Nova Entidade Gestora
-							</a>
 							<button class="btn btn-danger btn-sm" type="reset">Cancelar</button>
-							<button class="btn btn-default btn-sm" type="submit">Cadastrar</button>
+							<button class="btn btn-default btn-sm" type="submit">Gravar Dados</button>
 						</div>
 					</div>
 				</div>
@@ -244,14 +233,7 @@
 					}
 				?>
 			</div>
-
-			<!-- Listagem de investimentos existentes -->
-			<?php
-				include "get-carteira-mini.php";
-			?>   
 		</div>
-		
-		
 	</div>
 </body>
  

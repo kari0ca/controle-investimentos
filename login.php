@@ -13,7 +13,7 @@
       $param_password = password_hash($mypassword, PASSWORD_DEFAULT);
       
       $sql = "SELECT iduser, pass FROM investdb.user WHERE login = '$myusername'";
-      $result = mysqli_query($db,$sql);
+      $result = mysqli_query($db,$sql) or die(mysql_error());
       $row = mysqli_fetch_array($result,MYSQLI_ASSOC);
       $senha_hash = $row[pass];
       $active = $row['active'];
@@ -84,70 +84,74 @@
 </head>
 <body>
 
-<!-- Barra de navegação -->
-<nav class="navbar navbar-inverse">
-  <div class="container-fluid">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>                        
-      </button>
-      <a class="navbar-brand" href="#">Logo</a>
-    </div>
-    <div class="collapse navbar-collapse" id="myNavbar">
-      <ul class="nav navbar-nav">
-        <li class="active"><a href="./index.php">Início</a></li>
-        <li><a href="./sobre.php">Sobre</a></li>
-        <li><a href="./contato.php">Contato</a></li>
-      </ul>
-      <ul class="nav navbar-nav navbar-right">
-        <li><a href="./login.php"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
-      </ul>
-    </div>
-  </div>
-</nav>
-    
-
-<!-- Conteúdo -->
-<p></p>
-<span></span>
-<span></span>
-
-
-<div class="container">
-	<div class="row justify-content-center">
-		<div class="col-xs-12">
-			<form action = "" method = "post">
-        <div class="row">
-          <div class="col-xs-4 form-group">
-            <input class="form-control" id="login" name="username" placeholder="Login" type="text" required>
-          </div>
-          <div class="col-xs-4 form-group">
-            <input class="form-control" id="pass" name="password" placeholder="Senha" type="password" required>
-          </div>
-
-        </div>
-        <div class="row">
-          <div class="col-xs-4 form-group text-align:center"><a href="cadastr-usuario.php">Cadastrar usuário</a></div>
-          <div class="col-xs-4 form-group">
-            <button class="btn pull-right align:right" type="submit">Entrar</button>
-          </div>
-        </div>
-      </form>
-          <div class="row">
-            <?php
-              if ($error!=""){
-                echo '<div class="col-xs-8 form-group alert alert-danger">';
-                echo $error;
-                echo '</div>';
-              }
-            ?>
-          </div>
-      
+	<!-- Barra de navegação -->
+	<nav class="navbar navbar-inverse">
+	  <div class="container-fluid">
+	    <div class="navbar-header">
+		 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+		   <span class="icon-bar"></span>
+		   <span class="icon-bar"></span>
+		   <span class="icon-bar"></span>                        
+		 </button>
+		 <a class="navbar-brand" href="#">Logo</a>
+	    </div>
+	    <div class="collapse navbar-collapse" id="myNavbar">
+		 <ul class="nav navbar-nav">
+		   <li class="active"><a href="./index.php">Início</a></li>
+		   <li><a href="./sobre.php">Sobre</a></li>
+		   <li><a href="./contato.php">Contato</a></li>
+		 </ul>
+		 <ul class="nav navbar-nav navbar-right">
+		   <li><a href="./login.php"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+		 </ul>
+	    </div>
+	  </div>
+	</nav>
+	    
+	
+	<!-- Conteúdo -->
+	<div class="container">
+		<div class="row justify-content-center">
+			<form action = "" method = "post" name = "FormLogin">
+				<p><h3>Login de Usuário</h3></p>
+				<div class="row">
+					<div class="col-xs-2 form-group">
+					</div>	
+					<div class="col-xs-4 form-group">
+						<input class="form-control" id="login" name="username" placeholder="Login" type="text" required>
+					</div>
+					<div class="col-xs-4 form-group">
+						<input class="form-control" id="pass" name="password" placeholder="Senha" type="password" required>
+					</div>
+					<div class="col-xs-2 form-group">
+					</div>	
+				</div>
+				<div class="row">
+					<div class="col-xs-2 form-group">
+					</div>	
+					<div class="col-xs-8 form-group">
+						<div class="btn-group pull-right">
+							<a href="cadastr-usuario.php" class="btn btn-info btn-sm">
+								<span class="glyphicon glyphicon-plus-sign"></span> Cadastrar Usuário
+							</a>
+							<button class="btn btn-default btn-sm" type="submit">Cadastrar</button>
+						</div>
+					</div>					
+					<div class="col-xs-2 form-group">
+					</div>	
+				</div>
+			</form>
+			<div class="row">
+			  <?php
+			    if ($error!=""){
+				 echo '<div class="col-xs-8 form-group alert alert-danger">';
+				 echo $error;
+				 echo '</div>';
+			    }
+			  ?>
+			</div>
 		</div>
 	</div>
-</div>
 </body>
 
 
