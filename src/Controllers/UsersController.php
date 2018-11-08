@@ -72,7 +72,7 @@ class UsersController extends Controller
         echo '                    </div>';
         echo '                    <div class="row">';
         echo '                        <div class="col-xs-4 form-group text-align:center">';
-        echo '                            <a href="UsersController.php">Cadastrar usuário</a></div>';
+        echo '                            <a href="?controller=App\Controllers\Users&method=add">Cadastrar usuário</a></div>';
         echo '                            <div class="col-xs-4 form-group">';
         echo '                                <button class="btn btn-default pull-right align:right" type="submit">Entrar</button>';
         echo '                            </div>';
