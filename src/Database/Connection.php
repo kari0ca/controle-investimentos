@@ -2,7 +2,10 @@
 
 namespace App\Database;
 
-
+/**
+ * Class Connection
+ * @package App\Database
+ */
 final class Connection
 {
     static private $database;

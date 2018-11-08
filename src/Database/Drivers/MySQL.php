@@ -2,7 +2,10 @@
 
 namespace App\Database\Drivers;
 
-
+/**
+ * Class MySQL
+ * @package App\Database\Drivers
+ */
 class MySQL implements DatabaseDriverInterface
 {
     /** @var array */

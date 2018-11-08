@@ -2,7 +2,10 @@
 
 namespace App\Database\Drivers;
 
-
+/**
+ * Interface DatabaseDriverInterface
+ * @package App\Database\Drivers
+ */
 interface DatabaseDriverInterface
 {
     /**

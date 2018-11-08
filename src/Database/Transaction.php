@@ -2,7 +2,10 @@
 
 namespace App\Database;
 
-
+/**
+ * Class Transaction
+ * @package App\Database
+ */
 final class Transaction
 {
     /** @var \PDO */
