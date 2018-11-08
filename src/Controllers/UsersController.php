@@ -2,7 +2,7 @@
 
 namespace App\Controllers;
 
-use App\Database\Connection;
+use App\Database\Transaction;
 
 /**
  * Class UsersController
@@ -12,29 +12,36 @@ class UsersController extends Controller
 {
     /**
      * Login method
-     * 
      * @throws \Exception
      */
     public function login()
     {
         $error = '';
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $connection = Connection::open();
+            try {
+                Transaction::open();
+                $connection = Transaction::get();
 
-            $statement = $connection->prepare('SELECT `iduser`, `pass` FROM `user` WHERE `login` = :login');
-            $statement->bindParam(':login', $_POST['username'], \PDO::PARAM_STR);
-            $statement->execute();
+                $statement = $connection->prepare('SELECT `iduser`, `pass` FROM `user` WHERE `login` = :login');
+                $statement->bindParam(':login', $_POST['username'], \PDO::PARAM_STR);
+                $statement->execute();
 
-            $result = $statement->fetchObject();
+                $result = $statement->fetchObject();
 
-            //compara senha com hash
-            if (password_verify($_POST['password'], $result->pass)) {
-                $_SESSION["login_user"] = $_POST['username'];
-                $_SESSION["iduser"] = $result->iduser;
+                if ($result && password_verify($_POST['password'], $result->pass)) {
+                    $_SESSION['user'] = [
+                        'login' => $_POST['username'],
+                        'iduser' => $result->iduser,
+                    ];
 
-                return header('Location: /?controller=App\Controllers\Wallet');
-            } else {
-                $error = "Login ou Senha invalidos";
+                    return header('Location: /?controller=App\Controllers\Wallet');
+                } else {
+                    $error = "Login ou Senha invalidos";
+                }
+                Transaction::close();
+            } catch (\Exception $exception) {
+                Transaction::rollback();
+                throw $exception;
             }
         }
 
