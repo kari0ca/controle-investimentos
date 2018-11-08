@@ -1,6 +1,6 @@
 <?php
 if (empty($_SESSION['user']['login'])) {
-    if(!isset($_GET['method']) && $_GET['method'] !== 'login') {
+    if(isset($_GET['method']) && $_GET['method'] !== 'login') {
         header("Location: ?controller=App\Controllers\Users&method=login");
         die();
     }
