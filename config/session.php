@@ -7,13 +7,13 @@ if (empty($_SESSION['user']['login'])) {
 }
 
 
-$connection = \App\Database\Connection::open();
-
-$statement = $connection->prepare('SELECT `iduser`, `nome`, `login` FROM `user` WHERE login = :login');
-$statement->bindParam(':login', $_SESSION['user']['login'], \PDO::PARAM_STR);
-$statement->execute();
-
-$result = $statement->fetchObject();
+//$connection = \App\Database\Connection::open();
+//
+//$statement = $connection->prepare('SELECT `iduser`, `nome`, `login` FROM `user` WHERE login = :login');
+//$statement->bindParam(':login', $_SESSION['user']['login'], \PDO::PARAM_STR);
+//$statement->execute();
+//
+//$result = $statement->fetchObject();
 
 //$loginname_session = $row['nome'];//username
 //$login_user = $row['login'];
