@@ -15,11 +15,19 @@
                 <li><a href="./contato.php">Contato</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
-                <li>
-                    <a href="/?controller=App\Controllers\Users&method=login">
-                        <span class="glyphicon glyphicon-log-in"></span> Login
-                    </a>
-                </li>
+                <?php if (isset($_SESSION['user'])) : ?>
+                    <li>
+                        <a href="/?controller=App\Controllers\Users&method=logout">
+                            <span class="glyphicon glyphicon-log-out"></span> Logout
+                        </a>
+                    </li>
+                <?php else : ?>
+                    <li>
+                        <a href="/?controller=App\Controllers\Users&method=login">
+                            <span class="glyphicon glyphicon-log-in"></span> Login
+                        </a>
+                    </li>
+                <?php endif ?>
             </ul>
         </div>
     </div>
