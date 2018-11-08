@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Database\Drivers;
+namespace App\Database;
 
 
 use App\Database\Connection;
