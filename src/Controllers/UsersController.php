@@ -135,7 +135,7 @@ class UsersController extends Controller
                 $passwordHash = password_hash($_POST['password1'], PASSWORD_DEFAULT);
                 $idUser = $lastId + 1;
 
-                if(empty($error)) {
+                if (empty($error)) {
                     $statement = $connection->prepare('INSERT INTO user (`iduser`, `nome`, `login`, `pass`, `aux_senha`, `email`) VALUES (:iduser, :nome, :login, :pass, :aux_senha, :email)');
                     $statement->bindParam(':iduser', $idUser, \PDO::PARAM_INT);
                     $statement->bindParam(':nome', $_POST['nome'], \PDO::PARAM_STR);
