@@ -1,4 +1,6 @@
 <?php
+
+<!-- Conxeção ao banco de dados -->
 $servername = "localhost";
 $username = "higor";
 $password = "sp120c";
