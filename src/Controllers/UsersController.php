@@ -16,6 +16,10 @@ class UsersController extends Controller
      */
     public function login()
     {
+        if (isset($_SESSION['user'])) {
+            return header('Location: /?controller=App\Controllers\Wallet');
+        }
+        
         $error = '';
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             try {
