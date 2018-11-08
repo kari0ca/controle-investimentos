@@ -23,7 +23,7 @@ final class Connection
      * @return \PDO
      * @throws \Exception
      */
-    public static function open($database = 'default')
+    public static function open($database = 'default'): \PDO
     {
         $realPath = realpath(__DIR__ . '/../../config/config.php');
 
