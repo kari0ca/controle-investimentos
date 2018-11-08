@@ -7,12 +7,18 @@ final class Connection
 {
     static private $database;
 
+    /**
+     * Connection constructor.
+     * Private constructor so the class cannot be instantiated
+     */
     private function __construct()
     {
     }
 
     /**
-     * @param string $config
+     * Open a connection with the database.
+     *
+     * @param string $database
      *
      * @return \PDO
      * @throws \Exception
@@ -30,8 +36,7 @@ final class Connection
 
             self::$database = $database;
         }
-
-
+        
         $driver = $config['databases'][self::$database]['driver'];
 
         /** @var \App\Database\Drivers\DatabaseDriverInterface $driver */
