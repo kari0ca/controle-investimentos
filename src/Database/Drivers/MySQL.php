@@ -8,11 +8,21 @@ class MySQL implements DatabaseDriverInterface
     /** @var array */
     private $settings;
 
+    /**
+     * MySQL constructor.
+     *
+     * @param array $settings
+     */
     public function __construct(array $settings)
     {
         $this->settings = $settings;
     }
 
+    /**
+     * Open a new connection with a MySQL database on givem configuration
+     *
+     * @return \PDO
+     */
     public function getConnection(): \PDO
     {
         $hostname = $this->settings['hostname'] ?? 'localhost';
