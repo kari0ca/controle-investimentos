@@ -4,8 +4,17 @@ namespace App\Controllers;
 
 use App\Database\Connection;
 
+/**
+ * Class UsersController
+ * @package App\Controllers
+ */
 class UsersController extends Controller
 {
+    /**
+     * Login method
+     * 
+     * @throws \Exception
+     */
     public function login()
     {
         $error = '';

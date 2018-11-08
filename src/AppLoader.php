@@ -2,8 +2,15 @@
 
 namespace App;
 
+/**
+ * Class AppLoader
+ * @package App
+ */
 class AppLoader
 {
+    /**
+     * Run the method requested by the route.
+     */
     public function run()
     {
         try {
