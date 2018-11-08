@@ -38,7 +38,7 @@ class UsersController extends Controller
                         'iduser' => $result->iduser,
                     ];
 
-                    return header('Location: /?controller=App\Controllers\Wallet');
+                    header('Location: /?controller=App\Controllers\Wallet');
                 } else {
                     $error = "Login ou Senha invalidos";
                 }
