@@ -90,12 +90,14 @@ class UsersController extends Controller
         echo '</html>';
     }
 
+    /**
+     * Logout method
+     */
     public function logout()
     {
         if (session_destroy()) {
-            header("Location: login.php");
+            header('Location: /?controller=App\Controllers\Users&method=login');
         }
-        mysqli_close($db);
     }
 
     public function add()
