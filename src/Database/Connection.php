@@ -36,7 +36,7 @@ final class Connection
 
             self::$database = $database;
         }
-        
+
         $driver = $config['databases'][self::$database]['driver'];
 
         /** @var \App\Database\Drivers\DatabaseDriverInterface $driver */

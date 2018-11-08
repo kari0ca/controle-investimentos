@@ -33,7 +33,7 @@ final class Transaction
 
     /**
      * Get current database connection without the transaction
-     * 
+     *
      * @return \PDO
      */
     public static function get()
