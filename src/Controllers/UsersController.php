@@ -104,6 +104,9 @@ class UsersController extends Controller
         }
     }
 
+    /**
+     * @throws \Exception
+     */
     public function add()
     {
         $error = "";
@@ -132,16 +135,21 @@ class UsersController extends Controller
                 $passwordHash = password_hash($_POST['password1'], PASSWORD_DEFAULT);
                 $idUser = $lastId + 1;
 
-                $statement = $connection->prepare('INSERT INTO user (`iduser`, `nome`, `login`, `pass`, `aux_senha`, `email`) VALUES (:iduser, :nome, :login, :pass, :aux_senha, :email)');
-                $statement->bindParam(':iduser', $idUser, \PDO::PARAM_INT);
-                $statement->bindParam(':nome', $_POST['nome'], \PDO::PARAM_STR);
-                $statement->bindParam(':login', $_POST['username'], \PDO::PARAM_STR);
-                $statement->bindParam(':pass', $passwordHash, \PDO::PARAM_STR);
-                $statement->bindParam(':aux_senha', $_POST['lembrete'], \PDO::PARAM_STR);
-                $statement->bindParam(':email', $_POST['email'], \PDO::PARAM_STR);
-                $statement->execute();
+                if(empty($error)) {
+                    $statement = $connection->prepare('INSERT INTO user (`iduser`, `nome`, `login`, `pass`, `aux_senha`, `email`) VALUES (:iduser, :nome, :login, :pass, :aux_senha, :email)');
+                    $statement->bindParam(':iduser', $idUser, \PDO::PARAM_INT);
+                    $statement->bindParam(':nome', $_POST['nome'], \PDO::PARAM_STR);
+                    $statement->bindParam(':login', $_POST['username'], \PDO::PARAM_STR);
+                    $statement->bindParam(':pass', $passwordHash, \PDO::PARAM_STR);
+                    $statement->bindParam(':aux_senha', $_POST['lembrete'], \PDO::PARAM_STR);
+                    $statement->bindParam(':email', $_POST['email'], \PDO::PARAM_STR);
+                    $statement->execute();
+                }
 
                 Transaction::close();
+
+                header('Location: /?controller=App\Controllers\Users&method=login');
+
             } catch (\Exception $exception) {
                 Transaction::rollback();
                 throw $exception;
@@ -154,52 +162,47 @@ class UsersController extends Controller
 
         require_once 'menu.php';
 
-
         echo '<!--Conteúdo -->
         <p ></p >
         <span ></span >
         <span ></span >
         
-
         <div class="container" >
             <div class="row justify-content-center" >
                 <div class="col-xs-12" >
-                    <form action = "" method = "post" >
+                    <form action="/?controller=App\Controllers\Users&method=add" method="post">
                         <div class="row" >
                             <div class="col-xs-4 form-group" >
-                                <input class="form-control" id = "nome" name = "nome" placeholder = "Nome" type = "text" required >
+                                <input class="form-control" id="nome" name="nome" placeholder="Nome" type="text" required value="' . ($_POST['nome'] ?? null) . '">
                             </div >
                             <div class="col-xs-4 form-group" >
-                                <input class="form-control" id = "login" name = "username" placeholder = "Login" type = "text" required >
+                                <input class="form-control" id="login" name="username" placeholder="Login" type="text" required value="' . ($_POST['username'] ?? null) . '">
                             </div >
                         </div >
                         <div class="row" >
                             <div class="col-xs-8 form-group" >
-                                <input class="form-control" id = "email" name = "email" placeholder = "E-mail" type = "email" required >
+                                <input class="form-control" id="email" name="email" placeholder = "E-mail" type="email" required value="' . ($_POST['email'] ?? null) . '">
                             </div >
                         </div >
                         <div class="row" >
                             <div class="col-xs-4 form-group" >
-                                <input class="form-control" id = "pass1" name = "password1" placeholder = "Senha" type = "password"
-                                       required >
+                                <input class="form-control" id="pass1" name="password1" placeholder="Senha" type="password" required value="' . ($_POST['password1'] ?? null) . '">
                             </div >
                             <div class="col-xs-4 form-group" >
-                                <input class="form-control" id = "pass2" name = "password2" placeholder = "Repita a Senha"
-                                       type = "password" required >
+                                <input class="form-control" id="pass2" name="password2" placeholder="Repita a Senha" type="password" required value="' . ($_POST['password2'] ?? null) . '">
                             </div >
                         </div >
                         <div class="row" >
                             <div class="col-xs-4 form-group" >
-                                <input class="form-control" id = "lembrete" name = "lembrete" placeholder = "Lembrete da senha"
-                                       type = "text" required >
+                                <input class="form-control" id="lembrete" name="lembrete" placeholder="Lembrete da senha" type="text" required value="' . ($_POST['lembrete'] ?? null) . '">
                             </div >
                         </div >
                         <div class="row" >
                             <div class="col-xs-4 form-group" >
-                                <button class="btn btn-danger pull-right align:right" type = "reset" > Cancelar</button >
+                                <button class="btn btn-danger pull-right align:right" type="reset" >Cancelar</button >
                             </div >
                             <div class="col-xs-4 form-group" >
-                                <button class="btn btn-default pull-right align:left " type = "submit" > Cadastrar</button >
+                                <button class="btn btn-default pull-right align:left " type="submit" >Cadastrar</button >
                             </div >
                         </div >
                     </form >
