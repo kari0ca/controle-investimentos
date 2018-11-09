@@ -1,0 +1,29 @@
+{
+    "name": "kari0ca/controle-investimentos",
+    "description": "A package to manage investments",
+    "type": "project",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Higor Grilo",
+            "email": "hs.grilo@gmail.com"
+        },
+        {
+            "name": "Diego Mendonça",
+            "email": "diego182@gmail.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {
+        "php": ">=7.1"
+    },
+    "require-dev": {
+        "symfony/var-dumper": "^4.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        }
+    },
+    "prefer-stable": true
+}
