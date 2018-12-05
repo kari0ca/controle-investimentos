@@ -55,7 +55,38 @@
 
 	<!-- Conteúdo -->
 	<div class="container">
-		<div class="row justify-content-center">
+		<!-- Ajuda -->
+          <div class="row justify-content-center">
+			<button type="button" class="btn btn-xs pull-right" data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-question-sign"></span> Ajuda</button>
+			
+			<div id="myModal" class="modal fade" role="dialog">
+			  <div class="modal-dialog">
+			
+			    <div class="modal-content">
+				 <div class="modal-header">
+				   <button type="button" class="close" data-dismiss="modal">&times;</button>
+				   <h4 class="modal-title">Ajuda - Cadastro de Investimento</h4>
+				 </div>
+				 <div class="modal-body">
+				   <p>Nesta página temos o cadastro de investimentos, onde é possivel montar um novo Investimento para ser adicionado à carteira, o investimento é composto pelo tipo e subtipo de investimento e entidade gestora.
+				   <br>Dados necessários para o cadastro:
+				   <br> - Nome do Investimento*
+				   <br> - Entigade Gestora* -> ex: Banco Itaú, XP Investimentos.
+				   <br> - Tipo de investimento* -> ex: CDB, LCA, Fundo de Investimento, Título do tesouro
+				   <br> - Detalhes do investimento -> Descrição sobre o investimento, esta informação é para seu uso apenas
+				   <br> * Informação Obrigatória.
+				   <br><br> Os botões disponíveis são:
+				   <br> - Novo Tipo de Investimento -> Este botão deve ser usado quando não existe o tipo de investimento, do investimento que está sendo criado.
+				   <br> - Nova Entidade Gestora -> Este botão deve ser usado quando não existe a entidade gestora do investimento, imaginemos que o investimento que está sendo criado é o fundo: Alaska Black Fic Fia (que é operado por várias corretoras), mas não temos a corretora cadastrada no sistema, este botão permite-nos cadastrar uma corretora para este investimento.</p>
+				 </div>
+				 <div class="modal-footer">
+				   <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+				 </div>
+			    </div>
+			
+			  </div>
+			</div>
+			<!-- Formulário -->
 			<form action = "" method = "post" name = "FormCadastroInvestimento">
 				<p><h3>Cadastro de Investimento</h3></p>
 				<div class="row">

@@ -46,7 +46,32 @@
 
 	<!-- Conteúdo -->
 	<div class="container">
-		<div class="row justify-content-center">
+		<!-- Ajuda -->
+          <div class="row justify-content-center">
+			<button type="button" class="btn btn-xs pull-right" data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-question-sign"></span> Ajuda</button>
+			
+			<div id="myModal" class="modal fade" role="dialog">
+			  <div class="modal-dialog">
+			
+			    <div class="modal-content">
+				 <div class="modal-header">
+				   <button type="button" class="close" data-dismiss="modal">&times;</button>
+				   <h4 class="modal-title">Ajuda - Cadastro de Entidade Gestora de Investimento</h4>
+				 </div>
+				 <div class="modal-body">
+				   <p>Nesta página temos o cadastro de entidade gestora de investimentos, A entidade nada mais é do que a corretora do investimento.
+				   <br>Dados necessários para o cadastro:
+				   <br> - Entidade Gestora* -> Nome da entidade gestora, ex: Banco Itaú, XP Investimentos, Órama, etc.
+				   <br> * Informação Obrigatória.</p>
+				 </div>
+				 <div class="modal-footer">
+				   <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+				 </div>
+			    </div>
+			
+			  </div>
+			</div>
+			<!-- Formulário -->
 			<form action = "" method = "post" name = "FormCadastroEntidade">
 				<p><h3>Cadastro de Entidade Gestora de Investimento</h3></p>
 				<div class="row">

@@ -104,9 +104,42 @@
 ?>
 	<!-- Conteúdo -->
 	<div class="container">
-		<div class="row justify-content-center">
+		<!-- Ajuda -->
+          <div class="row justify-content-center">
+			<button type="button" class="btn btn-xs pull-right" data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-question-sign"></span> Ajuda</button>
+			
+			<div id="myModal" class="modal fade" role="dialog">
+			  <div class="modal-dialog">
+			
+			    <div class="modal-content">
+				 <div class="modal-header">
+				   <button type="button" class="close" data-dismiss="modal">&times;</button>
+				   <h4 class="modal-title">Ajuda - Configuração da Carteira de Investimento</h4>
+				 </div>
+				 <div class="modal-body">
+				   <p>Nesta página temos a configuração da carteira de investimentos, onde é possivel adicionar investimentos à carteira.
+				   <br>Para adicionar um investimento à carteira temos os seguintes campos:
+				   <br> - Investimento* -> Investimento existente, nesta seleção o investimento é descrito por: Nome - Entidade Gestora - Tipo de Investimento - Subtipo de Investimento
+				   <br>ex: Select Renda Fixa Referenciado DI - Santander - Fundo de Investimento - Renda Fixa
+				   <br> - Data inicial do investimento* -> Data na qual foi efetuado o investimento, o formato da data é DD/MM/AAAA
+				   <br> - Data final do investimento -> Data de fim do investimento (quando aplicável), em alguns casos o investimento tem uma data final
+				   <br> - Valor investido* -> Valor aplicado no investimento
+				   <br> - Ativo -> Informação se o Investimento está ativo ou não, é permitido o cadastro de investimentos inativos, por questões de histórico
+				   <br> - Notas sobre o investimento -> Notas ou uma breve descrição sobre este investimento adicionado à carteira, ex: é possivel ter vários investimentos do mesmo tipo na carteira, este campo pode ser usado como um diferenciador entre eles.
+				   <br><br> Sobre as informações mostradas, temos um resumo da carteira, onde são mostradas informações dos investimentos e o status
+				   <br><br> Os botões disponíveis são:
+				   <br> - Novo Investimento -> Para cadastrar um novo investimento, este botão deve ser usado quando o investimento a ser adicionado à carteira não existe, caso outro usuário tenha este investimento na carteira, basta adicionar à carteira, no botão: Gerenciar Carteira
+				 </div>
+				 <div class="modal-footer">
+				   <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+				 </div>
+			    </div>
+			
+			  </div>
+			</div>
+			<!-- Formulário -->
 			<form action = "" method = "post" name = "FormCadastroCarteira">
-				<p><h3>Configuraçãao da Carteira de Investimento</h3></p>
+				<p><h3>Configuração da Carteira de Investimento</h3></p>
 				<div class="row">
 					<div class="col-xs-12 form-group">
 						<label for="investimento">Investimento</label>
@@ -139,7 +172,7 @@
 						<input class="form-control" id="datafim" name="datafim" placeholder="Data final DD/MM/AAAA" type="text" >
 					</div>
 					<div class="col-xs-3 form-group">
-						<input class="form-control" id="valorini" name="valorini" placeholder="Valor investido" type="text" >
+						<input class="form-control" id="valorini" name="valorini" placeholder="Valor investido" type="text" required>
 					</div>
 					<div class="col-xs-3 form-group">
 						<input type="hidden" id="ativo2" name="ativo2" value="false">
@@ -159,11 +192,8 @@
 				<div class="row">
 					<div class="col-xs-12 form-group">
 						<div class="btn-group pull-right" >
-							<a href="cadastr-tipo.php" class="btn btn-info btn-sm">
-								<span class="glyphicon glyphicon-plus-sign"></span> Novo Tipo Investimento
-							</a>
-							<a href="cadastr-entidade.php" class="btn btn-info btn-sm">
-								<span class="glyphicon glyphicon-plus-sign"></span> Nova Entidade Gestora
+							<a href="cadastr-invest.php" class="btn btn-info btn-sm">
+								<span class="glyphicon glyphicon-plus-sign"></span> Novo Investimento
 							</a>
 							<button class="btn btn-danger btn-sm" type="reset">Cancelar</button>
 							<button class="btn btn-default btn-sm" type="submit">Cadastrar</button>

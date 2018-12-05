@@ -51,7 +51,35 @@
 
 	<!-- Conteúdo -->
 	<div class="container">
-		<div class="row justify-content-center"> 
+		<!-- Ajuda -->
+          <div class="row justify-content-center">
+			<button type="button" class="btn btn-xs pull-right" data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-question-sign"></span> Ajuda</button>
+			
+			<div id="myModal" class="modal fade" role="dialog">
+			  <div class="modal-dialog">
+			
+			    <div class="modal-content">
+				 <div class="modal-header">
+				   <button type="button" class="close" data-dismiss="modal">&times;</button>
+				   <h4 class="modal-title">Ajuda - Cadastro de Tipo de Investimento</h4>
+				 </div>
+				 <div class="modal-body">
+				   <p>Nesta página temos o cadastro de tipos de investimentos, o tipo de investimento tem associado, em alguns casos, um subtipo. ex: Tipo CDB, pode ter os subtipos Prefixado‎, DI Pósfixado, o tipo Fundo de Investimento, pode ter os subtipos: Fundo de Ação, Fundo Cambial, etc.
+				   <br>Dados necessários para o cadastro:
+				   <br> - Tipo de Investimento* -> Nome do Tipo, ex: CDB, Fundo de Investimento, LCA, etc.
+				   <br> - Subtipo de Investimento* -> Nome do subtipo, conforme explicado acima.
+				   <br> * Informação Obrigatória.
+				   <br><br> Os botões disponíveis são:
+				   <br> - Novo SubTipo de Investimento -> Este botão deve ser usado quando não existe o subtipo de investimento, para associar ao tipo de investimento que está sendo criado.</p>
+				 </div>
+				 <div class="modal-footer">
+				   <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+				 </div>
+			    </div>
+			
+			  </div>
+			</div>
+			<!-- Formulário -->
 			<form action = "" method = "post" name = "FormCadastroTipo">
 				<p><h3>Cadastro de Tipo de Investimento</h3></p>
 				<div class="row">

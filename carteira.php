@@ -16,7 +16,41 @@
 ?>
      <!-- Conteúdo -->
      <div class="container">
-          <div class="row justify-content-center"> 
+		<!-- Ajuda -->
+          <div class="row justify-content-center">
+			<button type="button" class="btn btn-xs pull-right" data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-question-sign"></span> Ajuda</button>
+			
+			<div id="myModal" class="modal fade" role="dialog">
+			  <div class="modal-dialog">
+			
+			    <div class="modal-content">
+				 <div class="modal-header">
+				   <button type="button" class="close" data-dismiss="modal">&times;</button>
+				   <h4 class="modal-title">Ajuda - Carteira de Investimentos</h4>
+				 </div>
+				 <div class="modal-body">
+				   <p>Nesta página temos a carteira de investimentos, onde é possivel filtrar a carteira.
+				   <br>Existem filtros para:
+				   <br> - Nome do Investimento
+				   <br> - Entigade Gestora
+				   <br> - Tipo de investimento
+				   <br> - Subtipo de investimento
+				   <br><br> Sobre as informações mostradas, temos:
+				   <br> - Rendimento total do investimento, em valor monetário
+				   <br> - Rendimento total do investimento, em percentual comparado com o investimento inicial, ex: se o percentual é de 112%, significa que hoje tenho 112% do meu investimento inicial, houve um ganho de 12%, por outro lado, se o percentual for de 87%, significa que houve uma perda de 13%
+				   <br><br> Os botões disponíveis são:
+				   <br> - Novo Investimento -> Para cadastrar um novo investimento, este botão deve ser usado quando o investimento a ser adicionado à carteira não existe, caso outro usuário tenha este investimento na carteira, basta adicionar à carteira, no botão: Gerenciar Carteira
+				   <br> - Gerenciar Carteira -> Deve ser usado para adicionar um investimento existente à carteira
+				   <br> - Atualizar Valores -> Esta é a pagina mais usada, deve ser usada para informar o valor do investimento, para que seja calculada a rentabilidade e estatística.</p>
+				 </div>
+				 <div class="modal-footer">
+				   <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+				 </div>
+			    </div>
+			
+			  </div>
+			</div>
+			<!-- Formulário -->
                <form name = "FormCarteira" >
                     <p><h3>Carteira de Investimentos</h3></p>
                     <div class="row">

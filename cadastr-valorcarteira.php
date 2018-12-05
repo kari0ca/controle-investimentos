@@ -11,7 +11,7 @@
 	$title = "[MI] - Leitura de valores da Carteira";
 	$metaD = "Leitura de valores da Carteira";
 	include 'header.php';
-	
+
 	$count = $_SESSION['count_inv'];
 	$error="";
 	if($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -50,14 +50,37 @@
 			//$sql = "SELECT idcarteira, data_fato FROM investdb.inv_fato WHERE idcarteira= ".$idcarteira[$i]." and data_fato= ".$dataref;
 			if (!empty($val[$i])){
 				$sql_insert = "INSERT INTO investdb.inv_fato VALUES (".$idcarteira[$i].",".$dataref.",'".$val[$i]."') ON DUPLICATE KEY UPDATE val_invest='".$val[$i]."'";
-				//echo "<br>SQL = ".$sql;
 				if (!mysqli_query($db, $sql_insert)) {
 					echo "Error: " . $sql_insert . "<br>" . mysqli_error($db);
-				}				
+				}
+				// Depois que insere o valor, atualiza a carteira com o rendimento até o momento
+				
+				$sql_fato = 'select a.data_fato, i.val_invest from (select max(data_fato) as data_fato from investdb.inv_fato where idcarteira='.$idcarteira[$i].') as a, investdb.inv_fato i where idcarteira='.$idcarteira[$i].' and i.data_fato = a.data_fato';
+				$qry_result_fato = mysqli_query($db,$sql_fato) or die(mysql_error());
+				$row_fato = mysqli_fetch_array($qry_result_fato,MYSQLI_ASSOC);
+				$max_data = $row_fato[data_fato];
+				$val_max = $row_fato[val_invest];
+				
+				$sql_cart = 'select data_ini, val_ini from investdb.carteira where idcarteira='.$idcarteira[$i];
+				$qry_result_cart = mysqli_query($db,$sql_cart) or die(mysql_error());
+				$row_cart = mysqli_fetch_array($qry_result_cart,MYSQLI_ASSOC);
+				$data_ini = $row_cart[data_ini];
+				$val_ini = $row_cart[val_ini];
+				
+				
+				//calculos de rentabilidade
+				$rent_per = (($val_max*100)/$val_ini);
+				$rent_val = $val_max - $val_ini;
+				$sql_insert = 'update investdb.carteira set rent_val='.$rent_val.', rent_perc='.$rent_per.' where idcarteira='.$idcarteira[$i];
+				if (!mysqli_query($db, $sql_insert)) {
+					echo "Error: " . $sql_insert . "<br>" . mysqli_error($db);
+				}
+				header("location:carteira.php"); die('Não ignore meu cabeçalho...');
 			}
 			else {
 				//echo "<br>Valor vazio no idcarteira ".$idcarteira[$i];
 			}
+
 		}
 		
 	}
@@ -66,7 +89,36 @@
  	 
 	<!-- Conteúdo -->
 	<div class="container">
-		<div class="row justify-content-center">
+		<!-- Ajuda -->
+          <div class="row justify-content-center">
+			<button type="button" class="btn btn-xs pull-right" data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-question-sign"></span> Ajuda</button>
+			
+			<div id="myModal" class="modal fade" role="dialog">
+			  <div class="modal-dialog">
+			
+			    <div class="modal-content">
+				 <div class="modal-header">
+				   <button type="button" class="close" data-dismiss="modal">&times;</button>
+				   <h4 class="modal-title">Ajuda - Leitura de valores da Carteira de Investimento</h4>
+				 </div>
+				 <div class="modal-body">
+				   <p>Nesta página temos a leitura de valores da Carteira de Investimento, aqui é possível inserir a leitura com os valores (recomendavel que seja liquido) dos investimentos
+				   <br>Esta leitura pode ser feita para qualquer data, inclusive para leituras antigas ou anteriores a última leitura existente.
+				   <br>A frequência de atualização fica a cargo do usuário, quão mais frequente, melhores serão as informações estatísticas sobre os investimentos.
+				   <br>Dados necessários para a leitura de valores: 
+				   <br> - Data de referência* -> Data da leitura dos valores
+				   <br> - Valor* -> Valor (recomendavel liquido) do investimento
+				   <br> É possível realizar a leitura para apenas alguns dos investimentos por vez, também é permitido atualizar valores, para tal, basta realizar a leitura novamente, ex: Foi realizada a leitura para o 1º investimento apenas, e em um segundo momento, é realizada a leitura dos valores dos demais investimentos para a mesma data de referência.</p>
+
+				 </div>
+				 <div class="modal-footer">
+				   <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+				 </div>
+			    </div>
+			
+			  </div>
+			</div>
+			<!-- Formulário -->
 			<form action = "" method = "post" name = "FormValorCarteira">
 				<p><h3>Leitura de valores da Carteira de Investimento</h3></p>
 				<div class="row">

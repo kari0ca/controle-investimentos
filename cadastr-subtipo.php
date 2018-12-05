@@ -46,12 +46,37 @@
 	<!-- Conteúdo -->
   
 	<div class="container">
-		<div class="row justify-content-center"> 
+		<!-- Ajuda -->
+          <div class="row justify-content-center">
+			<button type="button" class="btn btn-xs pull-right" data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-question-sign"></span> Ajuda</button>
+			
+			<div id="myModal" class="modal fade" role="dialog">
+			  <div class="modal-dialog">
+			
+			    <div class="modal-content">
+				 <div class="modal-header">
+				   <button type="button" class="close" data-dismiss="modal">&times;</button>
+				   <h4 class="modal-title">Ajuda - Cadastro de Subtipo de Investimento</h4>
+				 </div>
+				 <div class="modal-body">
+				   <p>Nesta página temos o cadastro de subtipos de investimentos, o subtipo de investimento está associado, a um tipo. ex: Tipo CDB, pode ter os subtipos Prefixado‎, DI Pósfixado, o tipo Fundo de Investimento, pode ter os subtipos: Fundo de Ação, Fundo Cambial, etc.
+				   <br>Dados necessários para o cadastro:
+				   <br> - SubTipo de Investimento* -> Nome do SubTipo, ex: Prefixado‎, DI Pósfixado (no caso de um CDB). Ação, Cambial, Multimercado, no caso de um fundo de investimento.
+				   <br> * Informação Obrigatória.</p>
+				 </div>
+				 <div class="modal-footer">
+				   <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+				 </div>
+			    </div>
+			
+			  </div>
+			</div>
+			<!-- Formulário -->
 			<form action = "" method = "post" name = "FormCadastroSubtipo">
 				<p><h3>Cadastro de Subtipo de Investimento</h3></p>
 				<div class="row">
 					<div class="col-xs-12 form-group">
-						<input class="form-control" id="subtipo" name="subtipo" placeholder="Sub Tipo de Investimento" type="text" required>
+						<input class="form-control" id="subtipo" name="subtipo" placeholder="SubTipo de Investimento" type="text" required>
 					</div>
 				</div>
 				<div class="row">
