@@ -186,6 +186,11 @@
 					}
 				?>
 			</div>
+			<br><br>
+			<!-- Listagem das ultimas leituras -->
+			<?php
+				include "get-valorcarteira.php";
+			?>   
 		</div>
 	</div>
 </body>

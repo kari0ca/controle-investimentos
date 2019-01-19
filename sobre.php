@@ -4,7 +4,7 @@
 	session_start();
   
 	$page = "Sobre";
-	$title = "Sobre a Plataforma";
+	$title = "[MI] - Sobre a Plataforma";
 	$metaD = "Página de explicação da plataforma";
 	include 'header.php';
 ?>

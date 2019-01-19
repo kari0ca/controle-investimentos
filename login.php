@@ -39,7 +39,7 @@
 	   }
 	}
 	$page = "Login";
-	$title = "Página de Login";
+	$title = "[MI] - Login";
 	$metaD = "Página de entrada do site";
 	include 'header.php';
 ?>

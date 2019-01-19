@@ -4,7 +4,7 @@
 	session_start();
   
 	$page = "Entrada";
-	$title = "Página Principal";
+	$title = "[MI] - Meu Investimento";
 	$metaD = "Página de entrada do site";
 	include 'header.php';
 ?>

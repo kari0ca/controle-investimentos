@@ -16,7 +16,7 @@
 	
    //build query
    //$query = "select i.idinvest, i.nome, t.tipo, s.subtipo from investdb.invest i, investdb.tipo_invest t, investdb.sub_tipo_invest s where i.idtipo=t.idtipoinvest and t.idsubtipo=s.idsubtipo";
-	$query = "select c.idcarteira, c.idinvest, i.nome, e.identidade, e.entidade, c.data_ini, c.rent_val, c.rent_perc, c.ativo, t.tipo, s.subtipo from investdb.carteira c, investdb.invest i, investdb.entidade e, investdb.tipo_invest t, investdb.sub_tipo_invest s where c.idinvest = i.idinvest and i.identidade = e.identidade and i.idtipo = t.idtipoinvest and t.idsubtipo = s.idsubtipo";
+	$query = "select c.idcarteira, c.idinvest, i.nome, e.identidade, e.entidade, c.data_ini, c.rent_val, c.val_ini, c.rent_perc, c.ativo, t.tipo, s.subtipo from investdb.carteira c, investdb.invest i, investdb.entidade e, investdb.tipo_invest t, investdb.sub_tipo_invest s where c.idinvest = i.idinvest and i.identidade = e.identidade and i.idtipo = t.idtipoinvest and t.idsubtipo = s.idsubtipo";
 	$query .= " and iduser=".$_SESSION['iduser'];
    if ($nome  != ''){
       $query .= " and i.nome='".$nome."'";
@@ -47,6 +47,7 @@
    $display_string .= "		<th>Tipo</th>";
    $display_string .= "		<th>SubTipo</th>";
    $display_string .= "		<th>Data Ini</th>";
+   $display_string .= "		<th>Val Ini</th>";
    $display_string .= "		<th>Rent $</th>";
    $display_string .= "		<th>Rent %</th>";
    $display_string .= "		<th>Ativo</th>";
@@ -66,6 +67,7 @@
       $display_string .= "		<td>" . $row[tipo] . "</td>";
       $display_string .= "		<td>" . $row[subtipo] . "</td>";
       $display_string .= "		<td>" . $trat_data_ini . "</td>";
+      $display_string .= "		<td>" . $row[val_ini] . "</td>";
       $display_string .= "		<td>" . $row[rent_val] . "</td>";
       $display_string .= "		<td>" . $row[rent_perc] . "</td>";
 		if ($row[ativo]==1){
