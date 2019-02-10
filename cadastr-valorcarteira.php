@@ -187,6 +187,7 @@
 				?>
 			</div>
 			<br><br>
+			<p><h4>Últimos valores da Carteira de Investimento</h4></p>
 			<!-- Listagem das ultimas leituras -->
 			<?php
 				include "get-valorcarteira.php";

@@ -115,7 +115,7 @@
 							<a class="dropdown-toggle" data-toggle="dropdown" href="#">Estatíticas
 							<span class="caret"></span></a>
 							<ul class="dropdown-menu">
-							  <li><a href="#">Estatísticas da Carteira</a></li>
+							  <li><a href="./estat-carteira.php">Estatísticas da Carteira</a></li>
 							  <li><a href="#">Melhores Investimentos</a></li>
 							</ul>
 						</li>';
