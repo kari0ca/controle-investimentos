@@ -8,11 +8,13 @@
    $entidade = $_GET['entidade'];
    $tipo = $_GET['tipo'];
    $subtipo = $_GET['subtipo'];
+   $estado = $_GET['estado'];
    
    // Escape User Input to help prevent SQL Injection
    $nome = mysqli_real_escape_string($db,$nome);   
    $tipo = mysqli_real_escape_string($db,$tipo);   
-   $subtipo = mysqli_real_escape_string($db,$subtipo);   
+   $subtipo = mysqli_real_escape_string($db,$subtipo);
+   $estado = mysqli_real_escape_string($db,$estado);   
 	
    //build query
    //$query = "select i.idinvest, i.nome, t.tipo, s.subtipo from investdb.invest i, investdb.tipo_invest t, investdb.sub_tipo_invest s where i.idtipo=t.idtipoinvest and t.idsubtipo=s.idsubtipo";
@@ -22,16 +24,16 @@
       $query .= " and i.nome='".$nome."'";
    }
    if ($entidade  != ''){
-		echo " Entidade=".$entidade;
       $query .= " and e.identidade='".$entidade."'";
    }
    if ($tipo  != ''){
-		echo " Tipo=".$tipo;
       $query .= " and t.tipo='".$tipo."'";
    }
    if ($subtipo  != ''){
-		echo " SubTipo=".$subtipo;
       $query .= " and s.subtipo='".$subtipo."'";
+   }
+   if ($estado  != ''){
+      $query .= " and c.ativo='".$estado."'";
    }
 	
 	
@@ -57,9 +59,11 @@
    $display_string .= "	</tr>";
    $display_string .= "</thead>";
    
-   $idcarteira=$ult_data=$ult_val=0;
+   $idcarteira=$ult_data=$ult_val=$max_diff_mes=$rent_mes_cart=$rent_mes_per_cart=$rent_ano_per_cart=0;
    $qry_result_ult_data=array();
-   $row_ult_data=array();
+   $row_ult_data=array(); //ultima data lida na tabela de fatos (por investimento da carteira) para calcular duração
+   $total_val_cart=$total_val_ini=$total_tp_ano=$tp_ano=$max_data=0; // variaveis para calcular a estatistica da carteira toda
+   $min_data=99999999;
    
    // Insert a new row in the table for each person returned
    while($row = mysqli_fetch_array($qry_result,MYSQLI_ASSOC)) {
@@ -70,9 +74,9 @@
 	 $qry_ult_data = 'select data_fato, val_invest from inv_fato where idcarteira='. $idcarteira .' and data_fato = (select max(data_fato) from inv_fato where idcarteira='. $idcarteira .')';
 	 $qry_result_ult_data = mysqli_query($db,$qry_ult_data) or die(mysql_error());
 	 $row_ult_data = mysqli_fetch_array($qry_result_ult_data,MYSQLI_ASSOC);
-	 
 	 $ult_data = $row_ult_data[data_fato];
 	 $ult_val = $row_ult_data[val_invest];
+	 //echo "<br> ult_data = ".$ult_data." ult_data[data_fato]=".$row_ult_data[data_fato];
 	 
 	 // Obtedo a diferença em meses, para o calculo da rentabilidade por mes
 	 $ini_data_dt = strtotime(substr($row[data_ini], 0, 4).'-'.substr($row[data_ini], 4, 2).'-'.substr($row[data_ini], -2));
@@ -104,18 +108,37 @@
 	 
 	 // Calculo da rentabilidade por mes %%
 	 $rent_mes_per = round(($row[rent_perc]-100)/$diff,2);
+
 	 
 	 // Calculo da rentabilidade por ano %%
-	 if ($diff_ano <= 1){
-		$rent_ano_per = round($row[rent_perc],2);
-		
-		//$rent_ano_per = (round($row[rent_perc]-100,2)/$diff)*12;
-		$rent_ano_per = round(((($row[rent_perc]-100)/$diff)*12),2);
-	 } else {
-		$rent_ano_per = round((pow(($row[rent_perc]/100),(1/($diff/12)))*100),2);
-		
+	 $tp_ano = $diff/12;
+	 $rent_ano_per = round(pow(($ult_val/$row[val_ini]),(1/$tp_ano)),4)*100;
+	 
+	 
+	 // Calculo de dados estatíticos da carteira
+	 if ($row[data_ini] < $min_data) 
+	 {
+		$min_data = $row[data_ini];
+	 }
+	 if ($ult_data > $max_data) 
+	 {
+		$max_data = $ult_data;
 	 }
 	 
+	 if ($diff > $max_diff_mes)
+	 {
+		$max_diff_mes = $diff;
+	 }
+	 $total_val_cart += $ult_val;
+	 $total_val_ini += $row[val_ini];
+	 $total_tp_ano = $max_diff_mes/12;
+	 $rent_mes_cart = round(($total_val_cart - $total_val_ini)/$max_diff_mes,2);
+	 $rent_mes_per_cart = ($total_val_cart/$total_val_ini);
+	 $rent_ano_per_cart = round(pow(($total_val_cart/$total_val_ini),(1/$total_tp_ano)),4)*100;
+	 
+	 //echo "<brTotal Cart = ".$total_val_cart." - Cart Ini = ".$total_val_ini." / Meses = ".$max_diff_mes;
+
+
 	 
 	 // echo '<br>Data inicial = '.date('Y-m-d', $ini_data_dt).' Data Final = '.date('Y-m-d', $ult_data_dt).'    diff_mes = '.$diff_mes.' diff_ano = '.$diff_ano;
 	 // echo '<br>Rent = '.$rent.' valor atual = '. $ult_val .' valor inicial = '.$row[val_ini].' Rentabilidade por mes $$ = '.$rent_mes.' ('.$rent.' / '.$diff.' )';
@@ -132,6 +155,8 @@
 		
       //Manipulação da data para o formato DD/MM/YYYY
 	 $trat_data_ini = substr($row[data_ini], -2)."/".substr($row[data_ini], 4, 2)."/".substr($row[data_ini],0,4) ;
+	 
+	 //echo "<br> UltData = ".$ult_data_dt." format date = ".date('d/m/Y', $ult_data_dt);
       $display_string .= "<thead>";
       $display_string .= " 	<tr>";
       $display_string .= "		<td>" . $row[nome] . "</td>";
@@ -150,14 +175,23 @@
       
       //echo "<br> Id = " . $row[idinvest] . ",";
    }
+   $trat_min_data = substr($min_data, -2)."/".substr($min_data, 4, 2)."/".substr($min_data,0,4) ;
+   $trat_max_data = substr($max_data, -2)."/".substr($max_data, 4, 2)."/".substr($max_data,0,4) ;
+   
+   $display_string .= " 	<tr>";
+   $display_string .= "		<td>TOTAL</td>";
+   $display_string .= "		<td>CARTEIRA</td>";
+   $display_string .= "		<td></td>";
+   $display_string .= "		<td></td>";
+   $display_string .= "		<td>" . $trat_min_data ."</td>";
+   $display_string .= "		<td>" . $total_val_ini . "</td>";
+   $display_string .= "		<td>" . $trat_max_data ."</td>";
+   $display_string .= "		<td>" . $total_val_cart . "</td>";
+   $display_string .= "		<td>" . round($rent_mes_cart,2) . "</td>";
+   $display_string .= "		<td>" . round($rent_mes_per_cart,2) ."%</td>";
+   $display_string .= "		<td>" . $rent_ano_per_cart ."%</td>";
+   $display_string .= "	</tr>";
    
    $display_string .= "</table>";
    echo $display_string;
-   
-   
-   
-   
-   
-   
-
 ?>

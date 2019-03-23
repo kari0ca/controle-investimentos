@@ -54,6 +54,7 @@
 					echo "Error: " . $sql_insert . "<br>" . mysqli_error($db);
 				}
 				// Depois que insere o valor, atualiza a carteira com o rendimento até o momento
+				echo "<br>SQL = ".$sql_insert;
 				
 				$sql_fato = 'select a.data_fato, i.val_invest from (select max(data_fato) as data_fato from investdb.inv_fato where idcarteira='.$idcarteira[$i].') as a, investdb.inv_fato i where idcarteira='.$idcarteira[$i].' and i.data_fato = a.data_fato';
 				$qry_result_fato = mysqli_query($db,$sql_fato) or die(mysql_error());
@@ -75,14 +76,14 @@
 				if (!mysqli_query($db, $sql_insert)) {
 					echo "Error: " . $sql_insert . "<br>" . mysqli_error($db);
 				}
-				header("location:carteira.php"); die('Não ignore meu cabeçalho...');
+				
 			}
 			else {
 				//echo "<br>Valor vazio no idcarteira ".$idcarteira[$i];
 			}
 
 		}
-		
+		header("location:carteira.php"); die('Não ignore meu cabeçalho...');
 	}
 
 ?>
@@ -133,7 +134,7 @@
 				<div class="row">
 					<div class="col-xs-12 form-group">
 						<?php
-							$query = "select c.idcarteira, c.nome, e.entidade, c.data_ini from investdb.carteira c, investdb.invest i, investdb.entidade e where c.idinvest=i.idinvest and i.identidade=e.identidade  ";
+							$query = "select c.idcarteira, c.nome, e.entidade, c.data_ini from investdb.carteira c, investdb.invest i, investdb.entidade e where c.idinvest=i.idinvest and i.identidade=e.identidade and c.ativo=1 ";
 							$query .= " and iduser=".$_SESSION['iduser'];
 								
 							//Execute query

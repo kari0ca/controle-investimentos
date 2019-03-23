@@ -93,7 +93,7 @@
                                    ?>
                               </select>
                          </div>  
-                         <div class="col-xs-3 form-group">
+                         <div class="col-xs-2 form-group">
 						<label for="tipo">Tipo:</label>
                               <select class="form-control" name="tipo">
                                    <option value=""></option>
@@ -112,7 +112,7 @@
                                    ?>
                               </select>
                          </div>
-                         <div class="col-xs-3 form-group">
+                         <div class="col-xs-2 form-group">
 						<label for="subtipo">SubTipo:</label>
                               <select class="form-control" name="subtipo">
                                    <option value=""></option>
@@ -128,6 +128,14 @@
                                         }
                                         echo $display_string;
                                    ?>
+                              </select>
+                         </div>
+					<div class="col-xs-2 form-group">
+						<label for="subtipo">Estado:</label>
+                              <select class="form-control" name="estado">
+                                   <option value=""></option>
+							<option value="1">Ativo</option>
+							<option value="0">Inativo</option>
                               </select>
                          </div>
                     </div>
