@@ -134,7 +134,7 @@
 						<label for="subtipo">Estado:</label>
                               <select class="form-control" name="estado">
                                    <option value=""></option>
-							<option value="1">Ativo</option>
+							<option selected value="1">Ativo</option>
 							<option value="0">Inativo</option>
                               </select>
                          </div>

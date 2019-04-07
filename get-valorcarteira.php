@@ -14,7 +14,7 @@
 	$subtipo = mysqli_real_escape_string($db,$subtipo);   
   
 	// Query de investimentos da carteira do usuário
-	$query_carteira = 'select idcarteira, nome from investdb.carteira where iduser = '.$_SESSION['iduser'].' order by idcarteira';
+	$query_carteira = 'select idcarteira, nome from investdb.carteira where iduser = '.$_SESSION['iduser'].' and ativo=1 order by idcarteira';
 	$qry_cart_result = mysqli_query($db,$query_carteira) or die(mysql_error());
 	
 	$idcarteiras=array();
@@ -26,7 +26,7 @@
 	$cont_carteira = count($idcarteiras);
 	
 	//Query datas
-	$query_data = 'select data_fato from investdb.inv_fato where idcarteira in (select idcarteira from investdb.carteira where iduser = '.$_SESSION['iduser'].') group by data_fato order by data_fato desc limit 5';
+	$query_data = 'select data_fato from investdb.inv_fato where idcarteira in (select idcarteira from investdb.carteira where iduser = '.$_SESSION['iduser'].' and ativo=1) group by data_fato order by data_fato desc limit 5';
 	// echo '<br>Query DATA '.$query_data . '<br>carteiras = '. $cont_carteira;
 	$qry_data_result = mysqli_query($db,$query_data) or die(mysql_error());
 	$datas=array();
@@ -38,7 +38,7 @@
 	
 	
 	//Query valores
-	$query_val = 'select data_fato, idcarteira, val_invest from investdb.inv_fato where idcarteira in (select idcarteira from investdb.carteira where iduser = '.$_SESSION['iduser'].') and data_fato >= '.$datas[$cont_data-1].' and data_fato <= '.$datas[0].' group by data_fato, idcarteira order by data_fato desc;';
+	$query_val = 'select data_fato, idcarteira, val_invest from investdb.inv_fato where idcarteira in (select idcarteira from investdb.carteira where iduser = '.$_SESSION['iduser'].' and ativo=1) and data_fato >= '.$datas[$cont_data-1].' and data_fato <= '.$datas[0].' group by data_fato, idcarteira order by data_fato desc;';
 	// echo '<br>Query de dados '.$query;
 	
 	// echo '<br> arrays: datas='; print_r($datas);

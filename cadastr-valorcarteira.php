@@ -54,7 +54,6 @@
 					echo "Error: " . $sql_insert . "<br>" . mysqli_error($db);
 				}
 				// Depois que insere o valor, atualiza a carteira com o rendimento até o momento
-				echo "<br>SQL = ".$sql_insert;
 				
 				$sql_fato = 'select a.data_fato, i.val_invest from (select max(data_fato) as data_fato from investdb.inv_fato where idcarteira='.$idcarteira[$i].') as a, investdb.inv_fato i where idcarteira='.$idcarteira[$i].' and i.data_fato = a.data_fato';
 				$qry_result_fato = mysqli_query($db,$sql_fato) or die(mysql_error());
@@ -77,12 +76,52 @@
 					echo "Error: " . $sql_insert . "<br>" . mysqli_error($db);
 				}
 				
+				// Obtem valor minimo do mês, para calcular agg_mes
+				$sql_mes = 'select f.val_invest min_val from investdb.inv_fato f, (select min(data_fato) min_data, idcarteira from investdb.inv_fato where data_fato>'.$year.$month.'00 and data_fato<'.$year.$month.'32 group by idcarteira) fmin where f.idcarteira=fmin.idcarteira and f.data_fato=fmin.min_data  and f.idcarteira='.$idcarteira[$i];
+				$qry_result_mes = mysqli_query($db,$sql_mes) or die(mysql_error());
+				$row_mes = mysqli_fetch_array($qry_result_mes,MYSQLI_ASSOC);
+				$val_ini_mes = $row_mes[min_val];
+
+				$sql_mes = 'select f.val_invest max_val from investdb.inv_fato f, (select max(data_fato) max_data, idcarteira from investdb.inv_fato where data_fato>'.$year.$month.'00 and data_fato<'.$year.$month.'32 group by idcarteira) fmax where f.idcarteira=fmax.idcarteira and f.data_fato=fmax.max_data  and f.idcarteira='.$idcarteira[$i];
+				$qry_result_mes = mysqli_query($db,$sql_mes) or die(mysql_error());
+				$row_mes = mysqli_fetch_array($qry_result_mes,MYSQLI_ASSOC);
+				$val_max_mes = $row_mes[max_val];
+				//echo '<br>Carteira='.$idcarteira[$i].', valor inicio do mês='.$val_ini_mes.', ultimo valor do mês='.$val_max_mes;
+				
+				$val_agg_mes=round((($val_max_mes*100)/$val_ini_mes),2);
+				
+				$sql_mes = 'INSERT INTO investdb.inv_agg_mes VALUES ('.$idcarteira[$i].','.$year.$month.','.$val_agg_mes.') ON DUPLICATE KEY UPDATE rend_mes_perc='.$val_agg_mes;
+				//echo '<br>Insert AGG= '.$sql_mes.'<br>Calculo val_agg_mes= (($val_max_mes*100)/$val_min_mes) -->(('.$val_max_mes.'*100)/'.$val_min_mes.')= '.$val_agg_mes;
+				if (!mysqli_query($db, $sql_mes)) {
+					echo "Error: " . $sql_mes . "<br>" . mysqli_error($db);
+				}
+
+				// Obtem valor minimo do ano, para calcular agg_ano
+				$sql_ano = 'select f.val_invest min_val from investdb.inv_fato f, (select min(data_fato) min_data, idcarteira from investdb.inv_fato where data_fato>'.$year.'0000 and data_fato<'.$year.'1232 group by idcarteira) fmin where f.idcarteira=fmin.idcarteira and f.data_fato=fmin.min_data  and f.idcarteira='.$idcarteira[$i];
+				$qry_result_ano = mysqli_query($db,$sql_ano) or die(mysql_error());
+				$row_ano = mysqli_fetch_array($qry_result_ano,MYSQLI_ASSOC);
+				$val_ini_ano = $row_ano[min_val];
+
+				$sql_ano = 'select f.val_invest max_val from investdb.inv_fato f, (select max(data_fato) max_data, idcarteira from investdb.inv_fato where data_fato>'.$year.'0000 and data_fato<'.$year.'1232 group by idcarteira) fmax where f.idcarteira=fmax.idcarteira and f.data_fato=fmax.max_data  and f.idcarteira='.$idcarteira[$i];
+				$qry_result_ano = mysqli_query($db,$sql_ano) or die(mysql_error());
+				$row_ano = mysqli_fetch_array($qry_result_ano,MYSQLI_ASSOC);
+				$val_max_ano = $row_ano[max_val];
+				
+				$val_agg_ano=round((($val_max_ano*100)/$val_ini_ano),2);
+				
+				$sql_ano = 'INSERT INTO investdb.inv_agg_ano VALUES ('.$idcarteira[$i].','.$year.','.$val_agg_ano.') ON DUPLICATE KEY UPDATE rend_ano_perc='.$val_agg_ano;
+				if (!mysqli_query($db, $sql_ano)) {
+					echo "Error: " . $sql_ano . "<br>" . mysqli_error($db);
+				}
+
+
 			}
 			else {
 				//echo "<br>Valor vazio no idcarteira ".$idcarteira[$i];
 			}
 
 		}
+		
 		header("location:carteira.php"); die('Não ignore meu cabeçalho...');
 	}
 

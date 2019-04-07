@@ -8,6 +8,7 @@
    $entidade = $_GET['entidade'];
    $tipo = $_GET['tipo'];
    $subtipo = $_GET['subtipo'];
+   // $ativo = $_GET['ativo'];
    
    // Escape User Input to help prevent SQL Injection
    $nome = mysqli_real_escape_string($db,$nome);   
@@ -16,7 +17,7 @@
 	
    //build query
    //$query = "select i.idinvest, i.nome, t.tipo, s.subtipo from investdb.invest i, investdb.tipo_invest t, investdb.sub_tipo_invest s where i.idtipo=t.idtipoinvest and t.idsubtipo=s.idsubtipo";
-	$query = "select c.idcarteira, c.idinvest, i.nome, e.identidade, e.entidade, c.data_ini, c.rent_val, c.val_ini, c.rent_perc, c.ativo, t.tipo, s.subtipo from investdb.carteira c, investdb.invest i, investdb.entidade e, investdb.tipo_invest t, investdb.sub_tipo_invest s where c.idinvest = i.idinvest and i.identidade = e.identidade and i.idtipo = t.idtipoinvest and t.idsubtipo = s.idsubtipo and c.ativo=1";
+	$query = "select c.idcarteira, c.idinvest, i.nome, e.identidade, e.entidade, c.data_ini, c.rent_val, c.val_ini, c.rent_perc, c.ativo, t.tipo, s.subtipo from investdb.carteira c, investdb.invest i, investdb.entidade e, investdb.tipo_invest t, investdb.sub_tipo_invest s where c.ativo = 1 and c.idinvest = i.idinvest and i.identidade = e.identidade and i.idtipo = t.idtipoinvest and t.idsubtipo = s.idsubtipo";
 	$query .= " and iduser=".$_SESSION['iduser'];
    if ($nome  != ''){
       $query .= " and i.nome='".$nome."'";
@@ -33,8 +34,12 @@
 		echo " SubTipo=".$subtipo;
       $query .= " and s.subtipo='".$subtipo."'";
    }
-	
-	
+   /*
+   if ($ativo != ''){
+		echo " ativo=".$ativo;
+      $query .= " and c.ativo='".$ativo."'";
+   }	
+   */
    //Execute query
    $qry_result = mysqli_query($db,$query) or die(mysql_error());
    
