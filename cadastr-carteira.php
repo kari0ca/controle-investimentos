@@ -114,7 +114,7 @@
 			    <div class="modal-content">
 				 <div class="modal-header">
 				   <button type="button" class="close" data-dismiss="modal">&times;</button>
-				   <h4 class="modal-title">Ajuda - Configuração da Carteira de Investimento</h4>
+				   <h4 class="modal-title">Ajuda - Cadastro de Investimento na Carteira de Investimento</h4>
 				 </div>
 				 <div class="modal-body">
 				   <p>Nesta página temos a configuração da carteira de investimentos, onde é possivel adicionar investimentos à carteira.
@@ -139,7 +139,7 @@
 			</div>
 			<!-- Formulário -->
 			<form action = "" method = "post" name = "FormCadastroCarteira">
-				<p><h3>Configuração da Carteira de Investimento</h3></p>
+				<p><h3>Cadastro de investimento na Carteira de Investimento</h3></p>
 				<div class="row">
 					<div class="col-xs-12 form-group">
 						<label for="investimento">Investimento</label>

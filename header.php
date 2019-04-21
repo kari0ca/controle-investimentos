@@ -106,8 +106,9 @@
 							<span class="caret"></span></a>
 							<ul class="dropdown-menu">
 							  <li><a href="./carteira.php">Visualizar Carteira</a></li>
-							  <li><a href="./cadastr-carteira.php">Configurar Carteira</a></li>
+							  <li><a href="./cadastr-carteira.php">Cadastro de Investimento na Carteira</a></li>
 							  <li><a href="./cadastr-valorcarteira.php">Leitura de valores</a></li>
+							  <li><a href="./cadastr-fim-invest.php">Finalização de investimento da Carteira</a></li>
 							</ul>
 						</li>';
 						//echo '<li class='.$active_estat.'><a href="./estatisticas.php">Estatíticas</a></li>';
@@ -116,6 +117,8 @@
 							<span class="caret"></span></a>
 							<ul class="dropdown-menu">
 							  <li><a href="./estat-carteira.php">Estatísticas da Carteira</a></li>
+							  <li><a href="./estat-cart-mes.php">Estatísticas Mensal da Carteira</a></li>
+							  <li><a href="./estat-cart-ano.php">Estatísticas Anual da Carteira</a></li>
 							  <li><a href="#">Melhores Investimentos</a></li>
 							</ul>
 						</li>';

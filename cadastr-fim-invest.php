@@ -7,9 +7,9 @@
 	   header("location:login.php"); die('Não ignore meu cabeçalho...');
 	}
 
-	$page = "Cadastr-valorcarteira";
-	$title = "[MI] - Leitura de valores da Carteira";
-	$metaD = "Leitura de valores da Carteira";
+	$page = "Cadastr-fiminvest";
+	$title = "[MI] - Finalização de investimento da Carteira";
+	$metaD = "Finalização de investimento da Carteira";
 	include 'header.php';
 
 	$count = $_SESSION['count_inv'];
@@ -65,7 +65,7 @@
 				//calculos de rentabilidade
 				$rent_per = (($val_max*100)/$val_ini);
 				$rent_val = $val_max - $val_ini;
-				$sql_insert = 'update investdb.carteira set rent_val='.$rent_val.', rent_perc='.$rent_per.' where idcarteira='.$idcarteira[$i];
+				$sql_insert = 'update investdb.carteira set rent_val='.$rent_val.', rent_perc='.$rent_per.', ativo=0, data_fim='.$dataref.' where idcarteira='.$idcarteira[$i];
 				if (!mysqli_query($db, $sql_insert)) {
 					echo "Error: " . $sql_insert . "<br>" . mysqli_error($db);
 				}
@@ -133,16 +133,15 @@
 			    <div class="modal-content">
 				 <div class="modal-header">
 				   <button type="button" class="close" data-dismiss="modal">&times;</button>
-				   <h4 class="modal-title">Ajuda - Leitura de valores da Carteira de Investimento</h4>
+				   <h4 class="modal-title">Ajuda - Finalização de investimento da Carteira</h4>
 				 </div>
 				 <div class="modal-body">
-				   <p>Nesta página temos a leitura de valores da Carteira de Investimento, aqui é possível inserir a leitura com os valores (recomendavel que seja liquido) dos investimentos
-				   <br>Esta leitura pode ser feita para qualquer data, inclusive para leituras antigas ou anteriores a última leitura existente.
-				   <br>A frequência de atualização fica a cargo do usuário, quão mais frequente, melhores serão as informações estatísticas sobre os investimentos.
+				   <p>Nesta página podemos realizar a o encerramento de um investimento, onde é possível inserir a última leitura com os valores (recomendavel que seja liquido) dos investimentos
+				   <br>A data usada, deve ser a data em que o investimento foi liquidado, caso pretenda informar a finalização de vários investimentos com datas diferentes, deverá executar esta ação uma vez para cada data.
+				   <br>
 				   <br>Dados necessários para a leitura de valores: 
-				   <br> - Data de referência* -> Data da leitura dos valores
-				   <br> - Valor* -> Valor (recomendavel liquido) do investimento
-				   <br> É possível realizar a leitura para apenas alguns dos investimentos por vez, também é permitido atualizar valores, para tal, basta realizar a leitura novamente, ex: Foi realizada a leitura para o 1º investimento apenas, e em um segundo momento, é realizada a leitura dos valores dos demais investimentos para a mesma data de referência.</p>
+				   <br> - Data de fim do investimento* -> Data em que encerrou o investimento
+				   <br> - Valor* -> Valor (recomendavel liquido) do investimento</p>
 
 				 </div>
 				 <div class="modal-footer">
@@ -154,10 +153,10 @@
 			</div>
 			<!-- Formulário -->
 			<form action = "" method = "post" name = "FormValorCarteira">
-				<p><h3>Leitura de valores da Carteira de Investimento</h3></p>
+				<p><h3>Finalização de investimento da Carteira de Investimento</h3></p>
 				<div class="row">
 					<div class="col-xs-12 form-group">
-						<div class='col-xs-9'><span class="pull-right">Data de Referência</span>
+						<div class='col-xs-9'><span class="pull-right">Data de fim do investimento</span>
 						</div>	
 						<div class='col-xs-3'>
 							<input class="form-control" id="dataref" name="dataref" placeholder="DD/MM/AAAA" type="text" required>
@@ -183,7 +182,7 @@
 							$display_string .= "	<div class='col-xs-4'><b>Nome</b></div>";
 							$display_string .= "	<div class='col-xs-3'><b>Entidade</b></div>";
 							$display_string .= "	<div class='col-xs-2'><b>Data Inicial</b></div>";
-							$display_string .= "	<div class='col-xs-3'><b>Leitura do Valor</b></div>";
+							$display_string .= "	<div class='col-xs-3'><b>Valor final do Investimento</b></div>";
 							$display_string .= "</div>";
 							
 							while($row = mysqli_fetch_array($qry_result,MYSQLI_ASSOC)) {
@@ -220,12 +219,6 @@
 					}
 				?>
 			</div>
-			<br><br>
-			<p><h4>Últimos valores registrados da Carteira de Investimento</h4></p>
-			<!-- Listagem das ultimas leituras -->
-			<?php
-				include "get-valorcarteira.php";
-			?>   
 		</div>
 	</div>
 </body>

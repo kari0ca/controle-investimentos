@@ -18,25 +18,26 @@
 	   $senha_hash = $row[pass];
 	   $active = $row['active'];
 	   $iduser = $row[iduser];
+	   $count = mysqli_num_rows($result);
+	   
 	   
 	   //compara senha com hash
 	   if (password_verify ($mypassword, $senha_hash)){
-		//echo "<br>Senha verificada com sucesso";
+		echo '<br>Passou na verificação da senha';
+		if($count == 1) {
+			echo '<br>count=1';
+		   $_SESSION["login_user"] = $myusername;
+		   $_SESSION["iduser"] = $iduser;
+		   header("location:carteira.php"); die('Não ignore meu cabeçalho...');
+		}else {
+			echo '<br>Count <> 1, count='.$count;
+		   $error = "Login ou Senha invalidos";
+		}		
 	   } else {
-		//echo "<br>Senha não verificada";
+		echo '<br>NÃO Passou na verificação da senha';
+		$error = "Login ou Senha invalidos";
 	   }
 	   
-	   $count = mysqli_num_rows($result);
-	   
-	   // If result matched $myusername and $mypassword, table row must be 1 row
-		  
-	   if($count == 1) {
-		 $_SESSION["login_user"] = $myusername;
-		 $_SESSION["iduser"] = $iduser;
-		 header("location:carteira.php"); die('Não ignore meu cabeçalho...');
-	   }else {
-		 $error = "Login ou Senha invalidos";
-	   }
 	}
 	$page = "Login";
 	$title = "[MI] - Login";
