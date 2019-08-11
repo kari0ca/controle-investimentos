@@ -23,15 +23,15 @@
       $query .= " and i.nome='".$nome."'";
    }
    if ($entidade  != ''){
-		echo " Entidade=".$entidade;
+		//echo " Entidade=".$entidade;
       $query .= " and e.identidade='".$entidade."'";
    }
    if ($tipo  != ''){
-		echo " Tipo=".$tipo;
+		//echo " Tipo=".$tipo;
       $query .= " and t.tipo='".$tipo."'";
    }
    if ($subtipo  != ''){
-		echo " SubTipo=".$subtipo;
+		//echo " SubTipo=".$subtipo;
       $query .= " and s.subtipo='".$subtipo."'";
    }
    /*

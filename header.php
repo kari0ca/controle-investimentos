@@ -108,6 +108,7 @@
 							  <li><a href="./carteira.php">Visualizar Carteira</a></li>
 							  <li><a href="./cadastr-carteira.php">Cadastro de Investimento na Carteira</a></li>
 							  <li><a href="./cadastr-valorcarteira.php">Leitura de valores</a></li>
+							  <li><a href="./acomp-valorcarteira.php">Acompanhamento de valores</a></li>
 							  <li><a href="./cadastr-fim-invest.php">Finalização de investimento da Carteira</a></li>
 							</ul>
 						</li>';

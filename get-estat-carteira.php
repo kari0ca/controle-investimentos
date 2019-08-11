@@ -99,19 +99,19 @@
 	 }
 	 // Calculo da diferença de tempo em meses: ano * 12 + diff_mes
 	 $diff = ($diff_ano * 12) + $diff_mes;
-	 // echo '<br>'.$row[nome].' Ult Data '.$ult_data.' - Data Ini'.$row[data_ini].' = '.$diff.' meses,     anos= '.$diff_ano.'*12, + meses='.$diff_mes.' mes_ult '.date('m',$ult_data_dt).' - mes_ini '.date('m',$ini_data_dt);
+	 //echo '<br>'.$row[nome].' Ult Data '.$ult_data.' - Data Ini'.$row[data_ini].' = '.$diff.' meses,     anos= '.$diff_ano.'*12, + meses='.$diff_mes.' mes_ult '.date('m',$ult_data_dt).' - mes_ini '.date('m',$ini_data_dt);
 	 
 	
-	 // Calculo da rentabilidade por mes $$
+	 // Calculo da rentabilidade por mes $$, (rendimento/numero de meses)
 	 $rent= $ult_val - $row[val_ini];
 	 $rent_mes = round($rent/$diff,2);
 	 
-	 // Calculo da rentabilidade por mes %%
+	 // Calculo da rentabilidade por mes %% (percentual de rendimento/numero de meses)
 	 $rent_mes_per = round(($row[rent_perc]-100)/$diff,2);
-
+	 //echo '<br>('.$row[rent_perc].'-100)'.' / '.$diff.' = '.$rent_mes_per;
 	 
 	 // Calculo da rentabilidade por ano %%
-	 $tp_ano = $diff/12;
+	 $tp_ano = $diff/12; // Tempo em anos
 	 $rent_ano_per = round(pow(($ult_val/$row[val_ini]),(1/$tp_ano)),4)*100;
 	 
 	 
@@ -132,10 +132,16 @@
 	 $total_val_cart += $ult_val;
 	 $total_val_ini += $row[val_ini];
 	 $total_tp_ano = $max_diff_mes/12;
-	 $rent_mes_cart = round(($total_val_cart - $total_val_ini)/$max_diff_mes,2);
+	 $rent_mes_cart += $rent_mes;
+	 //$rent_mes_cart = round(($total_val_cart - $total_val_ini)/$max_diff_mes,2);
 	 $rent_mes_per_cart = ($total_val_cart/$total_val_ini);
-	 $rent_ano_per_cart = round(pow(($total_val_cart/$total_val_ini),(1/$total_tp_ano)),4)*100;
-	 
+	 //echo '<br> rent_mes_per_cart';
+	 $rent_mes_per_cart = ((($total_val_cart/$total_val_ini)*100)-100)/$max_diff_mes;
+	 //echo '<br> rent_mes_per_cart  '.$rent_mes_per_cart.' = ((('.$total_val_cart.'/'.$total_val_ini.')*100)-100)/'.$max_diff_mes.' = '.round($rent_mes_per_cart,2);
+	 //$rent_ano_per_cart = round(pow(($total_val_cart/$total_val_ini),(1/$total_tp_ano)),4)*100;
+	 $rent_ano_per_cart = round((((($total_val_cart/$total_val_ini)*100)-100)/floor($total_tp_ano))+100,2);
+	 //echo '<br> floor('.$total_tp_ano.') = '.floor($total_tp_ano);
+	 //echo '<br> $rent_ano_per_cart '.$rent_ano_per_cart.' = (((('.$total_val_cart.'/'.$total_val_ini.')*100)-100)/'.floor($total_tp_ano).')+100';
 	 //echo "<brTotal Cart = ".$total_val_cart." - Cart Ini = ".$total_val_ini." / Meses = ".$max_diff_mes;
 
 
